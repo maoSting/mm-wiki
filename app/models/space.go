@@ -3,7 +3,8 @@ package models
 import (
 	"fmt"
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
+
 	"time"
 )
 
@@ -35,7 +36,8 @@ var SpaceModel = Space{}
 // get space by space_id
 func (s *Space) GetSpaceBySpaceId(spaceId string) (space map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 		"space_id":  spaceId,
 		"is_delete": Space_Delete_False,
@@ -50,7 +52,8 @@ func (s *Space) GetSpaceBySpaceId(spaceId string) (space map[string]string, err 
 // space_id and name is exists
 func (s *Space) HasSameName(spaceId, name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 		"space_id <>": spaceId,
 		"name":        name,
@@ -68,7 +71,8 @@ func (s *Space) HasSameName(spaceId, name string) (has bool, err error) {
 // name is exists
 func (s *Space) HasSpaceName(name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 		"name":      name,
 		"is_delete": Space_Delete_False,
@@ -85,7 +89,8 @@ func (s *Space) HasSpaceName(name string) (has bool, err error) {
 // get space by name
 func (s *Space) GetSpaceByName(name string) (space map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 		"name":      name,
 		"is_delete": Space_Delete_False,
@@ -124,7 +129,8 @@ func (s *Space) Insert(spaceValue map[string]interface{}) (id int64, err error) 
 	spaceValue["create_time"] = time.Now().Unix()
 	spaceValue["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_Space_Name, spaceValue))
 	if err != nil {
 		return
@@ -136,7 +142,8 @@ func (s *Space) Insert(spaceValue map[string]interface{}) (id int64, err error) 
 // update space by space_id
 func (s *Space) Update(spaceId string, spaceValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	spaceValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Space_Name, spaceValue, map[string]interface{}{
 		"space_id":  spaceId,
@@ -153,11 +160,13 @@ func (s *Space) Update(spaceId string, spaceValue map[string]interface{}) (id in
 func (s *Space) UpdateDBAndSpaceFileName(spaceId string, spaceValue map[string]interface{}, oldName string) (id int64, err error) {
 	// begin update
 	db := G.DB()
-	tx, err := db.Begin(db.Config)
+	// tx, err := db.Begin(db.Config)
+	tx, err := db.Begin()
 	if err != nil {
 		return
 	}
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 
 	// get real old space name (v0.1.2 #53 bug)
 	defaultDocument, err := DocumentModel.GetDocumentByParentIdAndSpaceId("0", spaceId, Document_Type_Dir)
@@ -209,7 +218,8 @@ func (s *Space) UpdateDBAndSpaceFileName(spaceId string, spaceValue map[string]i
 func (s *Space) GetSpacesByKeywordAndLimit(keyword string, limit int, number int) (spaces []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 		"is_delete": Space_Delete_False,
 	}).WhereWrap(map[string]interface{}{
@@ -231,7 +241,8 @@ func (s *Space) GetSpacesByKeywordAndLimit(keyword string, limit int, number int
 func (s *Space) GetSpacesByLimit(limit int, number int) (spaces []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			From(Table_Space_Name).
@@ -252,7 +263,8 @@ func (s *Space) GetSpacesByLimit(limit int, number int) (spaces []map[string]str
 func (s *Space) GetSpaces() (spaces []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 			"is_delete": Space_Delete_False,
@@ -268,7 +280,8 @@ func (s *Space) GetSpaces() (spaces []map[string]string, err error) {
 func (s *Space) GetSpacesByVisitLevel(visitLevel string) (spaces []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 			"visit_level": visitLevel,
@@ -285,7 +298,8 @@ func (s *Space) GetSpacesByVisitLevel(visitLevel string) (spaces []map[string]st
 func (s *Space) CountSpaces() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -304,7 +318,8 @@ func (s *Space) CountSpaces() (count int64, err error) {
 func (s *Space) CountSpacesByTags(tag string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -324,7 +339,8 @@ func (s *Space) CountSpacesByTags(tag string) (count int64, err error) {
 func (s *Space) CountSpacesByKeyword(keyword string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("count(*) as total").From(Table_Space_Name).
 		Where(map[string]interface{}{"is_delete": Space_Delete_False}).
 		WhereWrap(map[string]interface{}{"name LIKE": "%" + keyword + "%"}, "AND (", "").
@@ -341,7 +357,8 @@ func (s *Space) CountSpacesByKeyword(keyword string) (count int64, err error) {
 func (s *Space) GetSpacesByTags(tag string) (spaces []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 		"tags LIKE": "%" + tag + "%",
 		"is_delete": Space_Delete_False,
@@ -357,7 +374,8 @@ func (s *Space) GetSpacesByTags(tag string) (spaces []map[string]string, err err
 // get space by name
 func (s *Space) GetSpaceByLikeName(name string) (spaces []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 		"name Like": "%" + name + "%",
 		"is_delete": Space_Delete_False,
@@ -372,7 +390,8 @@ func (s *Space) GetSpaceByLikeName(name string) (spaces []map[string]string, err
 // get space by many space_id
 func (s *Space) GetSpaceBySpaceIds(spaceIds []string) (spaces []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Space_Name).Where(map[string]interface{}{
 		"space_id":  spaceIds,
 		"is_delete": Space_Delete_False,
@@ -387,7 +406,8 @@ func (s *Space) GetSpaceBySpaceIds(spaceIds []string) (spaces []map[string]strin
 // update space by name
 func (s *Space) UpdateSpaceByName(space map[string]interface{}) (affect int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	space["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Space_Name, space, map[string]interface{}{
 		"name": space["name"],

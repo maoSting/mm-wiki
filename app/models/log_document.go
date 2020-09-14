@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 )
 
@@ -21,7 +21,8 @@ var LogDocumentModel = LogDocument{}
 
 func (ld *LogDocument) GetLogDocumentByLogDocumentId(logDocId string) (logDocuments map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"log_document_id": logDocId,
 	}))
@@ -34,7 +35,8 @@ func (ld *LogDocument) GetLogDocumentByLogDocumentId(logDocId string) (logDocume
 
 func (ld *LogDocument) Insert(logDocument map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_LogDocument_Name, logDocument))
 	if err != nil {
 		return
@@ -81,7 +83,8 @@ func (ld *LogDocument) DeleteAction(userId string, documentId string, spaceId st
 
 func (ld *LogDocument) GetLogDocumentsByDocumentId(documentId string) (logDocuments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"document_id": documentId,
 	}))
@@ -94,7 +97,8 @@ func (ld *LogDocument) GetLogDocumentsByDocumentId(documentId string) (logDocume
 
 func (ld *LogDocument) GetLogDocumentsByUserId(userId string) (logDocuments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"user_id": userId,
 	}))
@@ -107,7 +111,8 @@ func (ld *LogDocument) GetLogDocumentsByUserId(userId string) (logDocuments []ma
 
 func (ld *LogDocument) GetLogDocumentsByDocumentIdAndLimit(documentId string, limit int, number int) (logDocuments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"document_id": documentId,
 	}).Limit(limit, number).OrderBy("log_document_id", "DESC"))
@@ -121,7 +126,8 @@ func (ld *LogDocument) GetLogDocumentsByDocumentIdAndLimit(documentId string, li
 
 func (ld *LogDocument) GetLogDocumentsByUserIdAndLimit(userId string, limit int, number int) (logDocuments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"user_id": userId,
 	}).Limit(limit, number).OrderBy("log_document_id", "DESC"))
@@ -135,7 +141,8 @@ func (ld *LogDocument) GetLogDocumentsByUserIdAndLimit(userId string, limit int,
 
 func (ld *LogDocument) GetLogDocumentsByUserIdKeywordAndLimit(userId string, keyword string, limit int, number int) (logDocuments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"comment LIKE": "%" + keyword + "%",
 		"user_id":      userId,
@@ -150,7 +157,8 @@ func (ld *LogDocument) GetLogDocumentsByUserIdKeywordAndLimit(userId string, key
 
 func (ld *LogDocument) GetLogDocumentsByKeywordAndLimit(keyword string, limit int, number int) (logDocuments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"comment LIKE": "%" + keyword + "%",
 	}).Limit(limit, number).OrderBy("log_document_id", "DESC"))
@@ -164,7 +172,8 @@ func (ld *LogDocument) GetLogDocumentsByKeywordAndLimit(keyword string, limit in
 
 func (ld *LogDocument) GetLogDocumentsByLimit(userId string, limit int, number int) (logDocuments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	where := db.AR().From(Table_LogDocument_Name)
 
 	// 查询用户空间权限
@@ -220,7 +229,8 @@ func (ld *LogDocument) GetLogDocumentsByLimit(userId string, limit int, number i
 func (ld *LogDocument) CountLogDocumentsByDocumentId(documentId string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().Select("count(*) as total").From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"document_id": documentId,
 	}))
@@ -234,7 +244,8 @@ func (ld *LogDocument) CountLogDocumentsByDocumentId(documentId string) (count i
 func (ld *LogDocument) CountLogDocumentsByUserId(userId string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().Select("count(*) as total").From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"user_id": userId,
 	}))
@@ -248,7 +259,8 @@ func (ld *LogDocument) CountLogDocumentsByUserId(userId string) (count int64, er
 func (ld *LogDocument) CountLogDocumentsByUserIdAndKeyword(userId string, keyword string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().Select("count(*) as total").From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"comment LIKE": "%" + keyword + "%",
 		"user_id":      userId,
@@ -263,7 +275,8 @@ func (ld *LogDocument) CountLogDocumentsByUserIdAndKeyword(userId string, keywor
 func (ld *LogDocument) CountLogDocumentsByKeyword(keyword string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().Select("count(*) as total").From(Table_LogDocument_Name).Where(map[string]interface{}{
 		"comment LIKE": "%" + keyword + "%",
 	}))
@@ -277,7 +290,8 @@ func (ld *LogDocument) CountLogDocumentsByKeyword(keyword string) (count int64, 
 func (ld *LogDocument) CountLogDocuments() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").

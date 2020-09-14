@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 )
 
@@ -16,7 +16,8 @@ var PluginModel = Plugin{}
 // get plugin by plugin_id
 func (p *Plugin) GetPluginByPluginId(pluginId string) (plugin map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(TablePluginName).Where(map[string]interface{}{
 		"plugin_id": pluginId,
 	}))
@@ -30,7 +31,8 @@ func (p *Plugin) GetPluginByPluginId(pluginId string) (plugin map[string]string,
 // update plugin by plugin_id
 func (p *Plugin) Update(pluginId string, pluginValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	pluginValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(TablePluginName, pluginValue, map[string]interface{}{
 		"plugin_id": pluginId,
@@ -46,7 +48,8 @@ func (p *Plugin) Update(pluginId string, pluginValue map[string]interface{}) (id
 func (p *Plugin) GetPluginsByKeywordAndLimit(keyword string, limit int, number int) (plugins []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(TablePluginName).Where(map[string]interface{}{
 		"title LIKE": "%" + keyword + "%",
 	}).Limit(limit, number).OrderBy("plugin_id", "DESC"))
@@ -62,7 +65,8 @@ func (p *Plugin) GetPluginsByKeywordAndLimit(keyword string, limit int, number i
 func (p *Plugin) GetPluginsByLimit(limit int, number int) (plugins []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(TablePluginName).
 			Limit(limit, number).
@@ -78,7 +82,8 @@ func (p *Plugin) GetPluginsByLimit(limit int, number int) (plugins []map[string]
 // update plugin conf value by pluginKey
 func (p *Plugin) UpdateConfValueByKey(pluginKey string, confValue string) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	pluginValue := map[string]interface{}{}
 	pluginValue["conf_value"] = confValue
 	pluginValue["update_time"] = time.Now().Unix()
@@ -95,7 +100,8 @@ func (p *Plugin) UpdateConfValueByKey(pluginKey string, confValue string) (id in
 // update plugin conf value by pluginId
 func (p *Plugin) UpdateConfValueByPluginId(pluginId string, confValue string) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	pluginValue := map[string]interface{}{}
 	pluginValue["conf_value"] = confValue
 	pluginValue["update_time"] = time.Now().Unix()
@@ -113,7 +119,8 @@ func (p *Plugin) UpdateConfValueByPluginId(pluginId string, confValue string) (i
 func (p *Plugin) GetPlugins() (plugins []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(TablePluginName))
 	if err != nil {
@@ -127,7 +134,8 @@ func (p *Plugin) GetPlugins() (plugins []map[string]string, err error) {
 func (p *Plugin) GetPluginsKeyMap() (pluginMaps map[string]map[string]string, err error) {
 	pluginMaps = make(map[string]map[string]string)
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(TablePluginName))
 	if err != nil {
@@ -146,7 +154,8 @@ func (p *Plugin) GetPluginsKeyMap() (pluginMaps map[string]map[string]string, er
 // get plugin by many plugin_id
 func (p *Plugin) GetPluginByPluginIds(pluginIds []string) (plugins []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(TablePluginName).Where(map[string]interface{}{
 		"plugin_id": pluginIds,
 	}))
@@ -163,7 +172,8 @@ func (p *Plugin) Insert(insertValue map[string]interface{}) (id int64, err error
 	insertValue["create_time"] = time.Now().Unix()
 	insertValue["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(TablePluginName, insertValue))
 	if err != nil {
 		return
@@ -176,7 +186,8 @@ func (p *Plugin) Insert(insertValue map[string]interface{}) (id int64, err error
 func (p *Plugin) GetPluginByKey(pluginKey string) (plugin map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(TablePluginName).Where(map[string]interface{}{
 		"plugin_key": pluginKey,
 	}).Limit(0, 1))
@@ -207,7 +218,8 @@ func (p *Plugin) GetConfValueByKey(pluginKey string, defaultValue string) (value
 func (p *Plugin) CountPlugins() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -223,7 +235,8 @@ func (p *Plugin) CountPlugins() (count int64, err error) {
 func (p *Plugin) CountPluginsByKeyword(keyword string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().
 		Select("count(*) as total").
 		From(TablePluginName).

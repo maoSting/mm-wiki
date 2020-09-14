@@ -3,7 +3,8 @@ package models
 import (
 	"fmt"
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
+
 	"time"
 )
 
@@ -22,7 +23,8 @@ var AttachmentModel = Attachment{}
 // get attachment by attachment_id
 func (a *Attachment) GetAttachmentByAttachmentId(attachmentId string) (attachment map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"attachment_id": attachmentId,
 	}))
@@ -36,7 +38,8 @@ func (a *Attachment) GetAttachmentByAttachmentId(attachmentId string) (attachmen
 // attachment_id and name is exists
 func (a *Attachment) HasSameName(attachmentId, name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"attachment_id <>": attachmentId,
 		"name":             name,
@@ -53,7 +56,8 @@ func (a *Attachment) HasSameName(attachmentId, name string) (has bool, err error
 // name is exists
 func (a *Attachment) HasAttachmentName(name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"name": name,
 	}).Limit(0, 1))
@@ -69,7 +73,8 @@ func (a *Attachment) HasAttachmentName(name string) (has bool, err error) {
 // get attachment by name
 func (a *Attachment) GetAttachmentByName(name string) (attachment map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"name": name,
 	}).Limit(0, 1))
@@ -83,7 +88,8 @@ func (a *Attachment) GetAttachmentByName(name string) (attachment map[string]str
 // get attachments by document and source
 func (a *Attachment) GetAttachmentsByDocumentIdAndSource(documentId string, source int) (attachments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"document_id": documentId,
 		"source":      source,
@@ -98,7 +104,8 @@ func (a *Attachment) GetAttachmentsByDocumentIdAndSource(documentId string, sour
 // get attachments by document_id
 func (a *Attachment) GetAttachmentsByDocumentId(documentId string) (attachments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"document_id": documentId,
 	}))
@@ -112,7 +119,8 @@ func (a *Attachment) GetAttachmentsByDocumentId(documentId string) (attachments 
 // get attachments by document_id
 func (a *Attachment) GetAttachmentsByDocumentIds(documentIds []string) (attachments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"document_id": documentIds,
 	}))
@@ -156,7 +164,8 @@ func (a *Attachment) Insert(attachmentValue map[string]interface{}, spaceId stri
 	attachmentValue["create_time"] = time.Now().Unix()
 	attachmentValue["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_Attachment_Name, attachmentValue))
 	if err != nil {
 		return
@@ -180,7 +189,8 @@ func (a *Attachment) Insert(attachmentValue map[string]interface{}, spaceId stri
 func (a *Attachment) GetAttachments() (attachments []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Attachment_Name))
 	if err != nil {
@@ -193,7 +203,8 @@ func (a *Attachment) GetAttachments() (attachments []map[string]string, err erro
 // get attachments by like name
 func (a *Attachment) GetAttachmentsByLikeName(name string) (attachments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"name Like": "%" + name + "%",
 	}).Limit(0, 1))
@@ -207,7 +218,8 @@ func (a *Attachment) GetAttachmentsByLikeName(name string) (attachments []map[st
 // get attachment by many attachment_id
 func (a *Attachment) GetAttachmentByAttachmentIds(attachmentIds []string) (attachments []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Attachment_Name).Where(map[string]interface{}{
 		"attachment_id": attachmentIds,
 	}))

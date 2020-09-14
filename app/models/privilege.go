@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 )
 
@@ -25,7 +25,8 @@ var PrivilegeModel = Privilege{}
 
 func (p *Privilege) GetTypePrivileges() (menus, controllers []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Privilege_Name).OrderBy("sequence", "ASC"))
 	if err != nil {
 		return
@@ -45,7 +46,8 @@ func (p *Privilege) GetTypePrivileges() (menus, controllers []map[string]string,
 
 func (p *Privilege) GetPrivileges() (privileges []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Privilege_Name))
 	if err != nil {
 		return
@@ -57,7 +59,8 @@ func (p *Privilege) GetPrivileges() (privileges []map[string]string, err error) 
 
 func (p *Privilege) GetPrivilegeByTypeControllerAndAction(ty, controller, action string) (privilege map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Privilege_Name).Where(map[string]interface{}{
 		"type":       ty,
 		"controller": controller,
@@ -98,7 +101,8 @@ func (p *Privilege) GetTypePrivilegesByUserId(userId string) (menus, controllers
 
 func (p *Privilege) GetTypePrivilegesByDisplay(display string) (menus, controllers []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Privilege_Name).Where(map[string]interface{}{
 		"is_display": display,
 	}).OrderBy("sequence", "ASC"))
@@ -120,7 +124,8 @@ func (p *Privilege) GetTypePrivilegesByDisplay(display string) (menus, controlle
 
 func (p *Privilege) GetTypePrivilegesByDisplayPrivilegeIds(display string, privilegeIds []string) (menus, controllers []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Privilege_Name).Where(map[string]interface{}{
 		"is_display":   display,
 		"privilege_id": privilegeIds,
@@ -143,7 +148,8 @@ func (p *Privilege) GetTypePrivilegesByDisplayPrivilegeIds(display string, privi
 
 func (p *Privilege) GetTypePrivilegesByPrivilegeIds(privilegeIds []string) (menus, controllers []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Privilege_Name).Where(map[string]interface{}{
 		"privilege_id": privilegeIds,
 	}).OrderBy("sequence", "ASC"))
@@ -165,7 +171,8 @@ func (p *Privilege) GetTypePrivilegesByPrivilegeIds(privilegeIds []string) (menu
 
 func (p *Privilege) GetPrivilegeByPrivilegeId(privilegeId string) (privilege map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Privilege_Name).Where(map[string]interface{}{
 		"privilege_id": privilegeId,
 	}))
@@ -177,7 +184,8 @@ func (p *Privilege) GetPrivilegeByPrivilegeId(privilegeId string) (privilege map
 }
 func (p *Privilege) HasSub(privilegeId string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Privilege_Name).Where(map[string]interface{}{
 		"parent_id": privilegeId,
 	}).Limit(0, 1))
@@ -204,7 +212,8 @@ func (p *Privilege) Insert(privilege map[string]interface{}) (id int64, err erro
 	privilege["create_time"] = time.Now().Unix()
 	privilege["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_Privilege_Name, privilege))
 	if err != nil {
 		return
@@ -237,7 +246,8 @@ func (p *Privilege) Update(privilegeId string, privilege map[string]interface{})
 
 	privilege["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Update(Table_Privilege_Name, privilege, map[string]interface{}{
 		"privilege_id": privilegeId,
 	}))

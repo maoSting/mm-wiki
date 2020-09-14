@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 )
 
@@ -28,7 +28,8 @@ var RoleModel = Role{}
 // get role by role_id
 func (r *Role) GetRoleByRoleId(roleId string) (role map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 		"role_id":   roleId,
 		"is_delete": Role_Delete_False,
@@ -43,7 +44,8 @@ func (r *Role) GetRoleByRoleId(roleId string) (role map[string]string, err error
 // role_id and name is exists
 func (r *Role) HasSameName(roleId, name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 		"role_id <>": roleId,
 		"name":       name,
@@ -61,7 +63,8 @@ func (r *Role) HasSameName(roleId, name string) (has bool, err error) {
 // name is exists
 func (r *Role) HasRoleName(name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 		"name":      name,
 		"is_delete": Role_Delete_False,
@@ -78,7 +81,8 @@ func (r *Role) HasRoleName(name string) (has bool, err error) {
 // get role by name
 func (r *Role) GetRoleByName(name string) (role map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 		"name":      name,
 		"is_delete": Role_Delete_False,
@@ -111,11 +115,13 @@ func (r *Role) Insert(roleValue map[string]interface{}) (id int64, err error) {
 	roleValue["create_time"] = time.Now().Unix()
 	roleValue["update_time"] = time.Now().Unix()
 	db := G.DB()
-	tx, err := db.Begin(db.Config)
+	// tx, err := db.Begin(db.Config)
+	tx, err := db.Begin()
 	if err != nil {
 		return
 	}
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.ExecTx(db.AR().Insert(Table_Role_Name, roleValue), tx)
 	if err != nil {
 		tx.Rollback()
@@ -148,7 +154,8 @@ func (r *Role) Insert(roleValue map[string]interface{}) (id int64, err error) {
 // update role by role_id
 func (r *Role) Update(roleId string, roleValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	roleValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Role_Name, roleValue, map[string]interface{}{
 		"role_id":   roleId,
@@ -165,7 +172,8 @@ func (r *Role) Update(roleId string, roleValue map[string]interface{}) (id int64
 func (r *Role) GetRolesByKeywordAndLimit(keyword string, limit int, number int) (roles []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 		"name LIKE": "%" + keyword + "%",
 		"is_delete": Role_Delete_False,
@@ -182,7 +190,8 @@ func (r *Role) GetRolesByKeywordAndLimit(keyword string, limit int, number int) 
 func (r *Role) GetRolesByLimit(limit int, number int) (roles []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			From(Table_Role_Name).
@@ -203,7 +212,8 @@ func (r *Role) GetRolesByLimit(limit int, number int) (roles []map[string]string
 func (r *Role) GetRoles() (roles []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 			"is_delete": Role_Delete_False,
@@ -219,7 +229,8 @@ func (r *Role) GetRoles() (roles []map[string]string, err error) {
 func (r *Role) GetRolesNotContainRoot() (roles []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 			"role_id !=": Role_Root_Id,
@@ -236,7 +247,8 @@ func (r *Role) GetRolesNotContainRoot() (roles []map[string]string, err error) {
 func (r *Role) CountRoles() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -255,7 +267,8 @@ func (r *Role) CountRoles() (count int64, err error) {
 func (r *Role) CountRolesByKeyword(keyword string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().
 		Select("count(*) as total").
 		From(Table_Role_Name).
@@ -273,7 +286,8 @@ func (r *Role) CountRolesByKeyword(keyword string) (count int64, err error) {
 // get role by name
 func (r *Role) GetRoleByLikeName(name string) (roles []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 		"name Like": "%" + name + "%",
 		"is_delete": Role_Delete_False,
@@ -288,7 +302,8 @@ func (r *Role) GetRoleByLikeName(name string) (roles []map[string]string, err er
 // get role by many role_id
 func (r *Role) GetRoleByRoleIds(roleIds []string) (roles []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 		"role_id":   roleIds,
 		"is_delete": Role_Delete_False,
@@ -303,7 +318,8 @@ func (r *Role) GetRoleByRoleIds(roleIds []string) (roles []map[string]string, er
 // update role by name
 func (r *Role) UpdateRoleByName(role map[string]interface{}) (affect int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	role["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Role_Name, role, map[string]interface{}{
 		"name":      role["name"],

@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 )
 
@@ -21,7 +21,8 @@ var FollowModel = Follow{}
 // get follow by follow_id
 func (f *Follow) GetFollowByFollowId(followId string) (follow map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Follow_Name).Where(map[string]interface{}{
 		"follow_id": followId,
 	}))
@@ -35,7 +36,8 @@ func (f *Follow) GetFollowByFollowId(followId string) (follow map[string]string,
 // get follows by user_id and type
 func (f *Follow) GetFollowsByUserIdAndType(userId string, followType int) (follows []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Follow_Name).Where(map[string]interface{}{
 		"user_id": userId,
 		"type":    followType,
@@ -50,7 +52,8 @@ func (f *Follow) GetFollowsByUserIdAndType(userId string, followType int) (follo
 // get follows by user_id and type limit
 func (f *Follow) GetFollowsByUserIdTypeAndLimit(userId string, followType int, limit int, number int) (follows []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Follow_Name).Where(map[string]interface{}{
 		"user_id": userId,
 		"type":    followType,
@@ -65,7 +68,8 @@ func (f *Follow) GetFollowsByUserIdTypeAndLimit(userId string, followType int, l
 // get followed follows
 func (f *Follow) GetFollowsByObjectIdAndType(objectId string, followType int) (follows []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Follow_Name).Where(map[string]interface{}{
 		"object_id": objectId,
 		"type":      followType,
@@ -80,7 +84,8 @@ func (f *Follow) GetFollowsByObjectIdAndType(objectId string, followType int) (f
 // get followed follow
 func (f *Follow) GetFollowByUserIdAndTypeAndObjectId(userId string, followType int, objectId string) (follow map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Follow_Name).Where(map[string]interface{}{
 		"user_id":   userId,
 		"type":      followType,
@@ -127,7 +132,8 @@ func (f *Follow) Insert(userId string, fType int, objectId string) (id int64, er
 		"create_time": time.Now().Unix(),
 	}
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_Follow_Name, followValue))
 	if err != nil {
 		return
@@ -140,7 +146,8 @@ func (f *Follow) Insert(userId string, fType int, objectId string) (id int64, er
 func (f *Follow) GetFollows() (follows []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Follow_Name))
 	if err != nil {
@@ -154,7 +161,8 @@ func (f *Follow) GetFollows() (follows []map[string]string, err error) {
 func (f *Follow) CountFollows() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -170,7 +178,8 @@ func (f *Follow) CountFollows() (count int64, err error) {
 func (f *Follow) CountFollowsByUserIdAndType(userId string, followType int) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().Select("count(*) as total").From(Table_Follow_Name).Where(map[string]interface{}{
 		"user_id": userId,
 		"type":    followType,
@@ -185,7 +194,8 @@ func (f *Follow) CountFollowsByUserIdAndType(userId string, followType int) (cou
 // get follows by many follow_id
 func (f *Follow) GetFollowsByFollowIds(followIds []string) (follows []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Follow_Name).Where(map[string]interface{}{
 		"follow_id": followIds,
 	}))
@@ -227,7 +237,8 @@ func (f *Follow) FollowDocument(userId string, documentId string) (id int64, err
 func (f *Follow) GetFollowGroupUserId(fType int) (collects []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("user_id, count('user_id') as total").
 		From(Table_Follow_Name).Where(map[string]interface{}{
 		"type": fType,
@@ -243,7 +254,8 @@ func (f *Follow) GetFollowGroupUserId(fType int) (collects []map[string]string, 
 func (f *Follow) GetFansUserGroupUserId() (collects []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("object_id, count('object_id') as total").
 		From(Table_Follow_Name).Where(map[string]interface{}{
 		"type": Follow_Type_User,

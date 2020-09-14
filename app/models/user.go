@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"strings"
 	"time"
 )
@@ -28,7 +28,8 @@ var UserModel = User{}
 // get user by user_id
 func (u *User) GetUserByUserId(userId string) (user map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"user_id":   userId,
 		"is_delete": User_Delete_False,
@@ -43,7 +44,8 @@ func (u *User) GetUserByUserId(userId string) (user map[string]string, err error
 // user_id and username is exists
 func (u *User) HasSameUsername(userId, username string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"user_id <>": userId,
 		"username":   username,
@@ -61,7 +63,8 @@ func (u *User) HasSameUsername(userId, username string) (has bool, err error) {
 // username is exists
 func (u *User) HasUsername(username string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"username":  username,
 		"is_delete": User_Delete_False,
@@ -78,7 +81,8 @@ func (u *User) HasUsername(username string) (has bool, err error) {
 // get user by username
 func (u *User) GetUserByUsername(username string) (user map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"username":  username,
 		"is_delete": User_Delete_False,
@@ -111,7 +115,8 @@ func (u *User) Insert(userValue map[string]interface{}) (id int64, err error) {
 	userValue["create_time"] = time.Now().Unix()
 	userValue["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_User_Name, userValue))
 	if err != nil {
 		return
@@ -123,7 +128,8 @@ func (u *User) Insert(userValue map[string]interface{}) (id int64, err error) {
 // update user by user_id
 func (u *User) Update(userId string, userValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	userValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_User_Name, userValue, map[string]interface{}{
 		"user_id":   userId,
@@ -171,7 +177,8 @@ func (u *User) EncodePassword(password string) (passwordHash string) {
 func (u *User) GetUsersByKeywordsAndLimit(keywords map[string]string, limit int, number int) (users []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	var whereValue = map[string]interface{}{
 		"is_delete": User_Delete_False,
 	}
@@ -197,7 +204,8 @@ func (u *User) GetUsersByKeywordsAndLimit(keywords map[string]string, limit int,
 func (u *User) GetUsersByLimit(limit int, number int) (users []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			From(Table_User_Name).
@@ -218,7 +226,8 @@ func (u *User) GetUsersByLimit(limit int, number int) (users []map[string]string
 func (u *User) CountUsers() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -237,7 +246,8 @@ func (u *User) CountUsers() (count int64, err error) {
 func (u *User) CountUsersByLastTime(lastTime int64) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -257,7 +267,8 @@ func (u *User) CountUsersByLastTime(lastTime int64) (count int64, err error) {
 func (u *User) CountNormalUsers() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -277,7 +288,8 @@ func (u *User) CountNormalUsers() (count int64, err error) {
 func (u *User) CountForbiddenUsers() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -297,7 +309,8 @@ func (u *User) CountForbiddenUsers() (count int64, err error) {
 func (u *User) CountUsersByKeywords(keywords map[string]string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	var whereValue = map[string]interface{}{
 		"is_delete": User_Delete_False,
 	}
@@ -321,7 +334,8 @@ func (u *User) CountUsersByKeywords(keywords map[string]string) (count int64, er
 // get user by username
 func (u *User) GetUserByLikeName(username string) (users []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"username Like": "%" + username + "%",
 		"is_delete":     User_Delete_False,
@@ -336,7 +350,8 @@ func (u *User) GetUserByLikeName(username string) (users []map[string]string, er
 // get user by many user_id
 func (u *User) GetUsersByUserIds(userIds []string) (users []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"user_id":   userIds,
 		"is_delete": User_Delete_False,
@@ -351,7 +366,8 @@ func (u *User) GetUsersByUserIds(userIds []string) (users []map[string]string, e
 // get user by many user_id
 func (u *User) GetUsersByRoleId(roleId string) (users []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"role_id":   roleId,
 		"is_delete": User_Delete_False,
@@ -366,7 +382,8 @@ func (u *User) GetUsersByRoleId(roleId string) (users []map[string]string, err e
 // get user by not in user_ids
 func (u *User) GetUserByNotUserIds(userIds []string) (users []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"user_id NOT": userIds,
 		"is_delete":   User_Delete_False,
@@ -381,7 +398,8 @@ func (u *User) GetUserByNotUserIds(userIds []string) (users []map[string]string,
 // get all users
 func (u *User) GetUsers() (users []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"is_delete": User_Delete_False,
 	}))
@@ -395,7 +413,8 @@ func (u *User) GetUsers() (users []map[string]string, err error) {
 // update user by username
 func (u *User) UpdateUserByUsername(user map[string]interface{}) (affect int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	user["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_User_Name, user, map[string]interface{}{
 		"username": user["username"],

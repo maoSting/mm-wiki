@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 )
 
@@ -27,7 +27,8 @@ var ConfigModel = Config{}
 // get config by config_id
 func (c *Config) GetConfigByConfigId(configId string) (config map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	////var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Config_Name).Where(map[string]interface{}{
 		"config_id": configId,
 	}))
@@ -41,7 +42,8 @@ func (c *Config) GetConfigByConfigId(configId string) (config map[string]string,
 // update config by config_id
 func (c *Config) Update(configId string, configValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	configValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Config_Name, configValue, map[string]interface{}{
 		"config_id": configId,
@@ -56,7 +58,8 @@ func (c *Config) Update(configId string, configValue map[string]interface{}) (id
 // update config by key
 func (c *Config) UpdateByKey(key string, value string) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	configValue := map[string]interface{}{}
 	configValue["value"] = value
 	configValue["update_time"] = time.Now().Unix()
@@ -74,7 +77,8 @@ func (c *Config) UpdateByKey(key string, value string) (id int64, err error) {
 func (c *Config) GetConfigs() (configs []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Config_Name))
 	if err != nil {
@@ -88,7 +92,8 @@ func (c *Config) GetConfigs() (configs []map[string]string, err error) {
 func (c *Config) GetConfigsKeyMap() (configMaps map[string]map[string]string, err error) {
 	configMaps = make(map[string]map[string]string)
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Config_Name))
 	if err != nil {
@@ -107,7 +112,8 @@ func (c *Config) GetConfigsKeyMap() (configMaps map[string]map[string]string, er
 // get config by many config_id
 func (c *Config) GetConfigByConfigIds(configIds []string) (configs []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Config_Name).Where(map[string]interface{}{
 		"config_id": configIds,
 	}))
@@ -122,7 +128,8 @@ func (c *Config) GetConfigByConfigIds(configIds []string) (configs []map[string]
 func (c *Config) InsertBatch(insertValues []map[string]interface{}) (id int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().InsertBatch(Table_Config_Name, insertValues))
 	if err != nil {
 		return
@@ -137,7 +144,8 @@ func (c *Config) Insert(insertValue map[string]interface{}) (id int64, err error
 	insertValue["create_time"] = time.Now().Unix()
 	insertValue["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_Config_Name, insertValue))
 	if err != nil {
 		return
@@ -150,7 +158,8 @@ func (c *Config) Insert(insertValue map[string]interface{}) (id int64, err error
 func (c *Config) GetConfigByKey(key string) (config map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Config_Name).Where(map[string]interface{}{
 		"key": key,
 	}).Limit(0, 1))

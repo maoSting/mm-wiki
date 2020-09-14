@@ -1,11 +1,10 @@
 package models
 
 import (
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 
 	"github.com/phachon/mm-wiki/app/utils"
-
-	"github.com/snail007/go-activerecord/mysql"
 )
 
 const (
@@ -23,7 +22,8 @@ var AuthModel = Auth{}
 // get auth by auth_id
 func (a *Auth) GetAuthByAuthId(authId string) (auth map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"login_auth_id": authId,
 	}))
@@ -37,7 +37,8 @@ func (a *Auth) GetAuthByAuthId(authId string) (auth map[string]string, err error
 // auth_id and name is exists
 func (a *Auth) HasSameName(authId, name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"login_auth_id <>": authId,
 		"name":             name,
@@ -54,7 +55,8 @@ func (a *Auth) HasSameName(authId, name string) (has bool, err error) {
 // auth_id and name is exists
 func (a *Auth) HasSameUsernamePrefix(authId, usernamePrefix string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"login_auth_id <>": authId,
 		"username_prefix":  usernamePrefix,
@@ -71,7 +73,8 @@ func (a *Auth) HasSameUsernamePrefix(authId, usernamePrefix string) (has bool, e
 // name is exists
 func (a *Auth) HasAuthName(name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"name": name,
 	}).Limit(0, 1))
@@ -87,7 +90,8 @@ func (a *Auth) HasAuthName(name string) (has bool, err error) {
 // name is exists
 func (a *Auth) HasAuthUsernamePrefix(usernamePrefix string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"username_prefix": usernamePrefix,
 	}).Limit(0, 1))
@@ -103,7 +107,8 @@ func (a *Auth) HasAuthUsernamePrefix(usernamePrefix string) (has bool, err error
 // get auth by name
 func (a *Auth) GetAuthByName(name string) (auth map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"name": name,
 	}).Limit(0, 1))
@@ -129,7 +134,8 @@ func (a *Auth) Delete(authId string) (err error) {
 // insert auth
 func (a *Auth) Insert(authValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 
 	// is_used
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
@@ -158,7 +164,8 @@ func (a *Auth) Insert(authValue map[string]interface{}) (id int64, err error) {
 // update auth by auth_id
 func (a *Auth) Update(authId string, authValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	authValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Auth_Name, authValue, map[string]interface{}{
 		"login_auth_id": authId,
@@ -174,7 +181,8 @@ func (a *Auth) Update(authId string, authValue map[string]interface{}) (id int64
 func (a *Auth) GetAuthsByKeywordAndLimit(keyword string, limit int, number int) (auths []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"name LIKE": "%" + keyword + "%",
 	}).Limit(limit, number).OrderBy("auth_id", "DESC"))
@@ -190,7 +198,8 @@ func (a *Auth) GetAuthsByKeywordAndLimit(keyword string, limit int, number int) 
 func (a *Auth) GetAuthsByLimit(limit int, number int) (auths []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			From(Table_Auth_Name).
@@ -208,7 +217,8 @@ func (a *Auth) GetAuthsByLimit(limit int, number int) (auths []map[string]string
 func (a *Auth) GetAuths() (auths []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Auth_Name))
 	if err != nil {
@@ -222,7 +232,8 @@ func (a *Auth) GetAuths() (auths []map[string]string, err error) {
 func (a *Auth) CountAuths() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -238,7 +249,8 @@ func (a *Auth) CountAuths() (count int64, err error) {
 func (a *Auth) CountAuthsByKeyword(keyword string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().
 		Select("count(*) as total").
 		From(Table_Auth_Name).
@@ -255,7 +267,8 @@ func (a *Auth) CountAuthsByKeyword(keyword string) (count int64, err error) {
 // get auths by like name
 func (a *Auth) GetAuthsByLikeName(name string) (auths []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"name Like": "%" + name + "%",
 	}).Limit(0, 1))
@@ -269,7 +282,8 @@ func (a *Auth) GetAuthsByLikeName(name string) (auths []map[string]string, err e
 // get auth by many auth_id
 func (a *Auth) GetAuthByAuthIds(authIds []string) (auths []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Auth_Name).Where(map[string]interface{}{
 		"login_auth_id": authIds,
 	}))
@@ -283,7 +297,8 @@ func (a *Auth) GetAuthByAuthIds(authIds []string) (auths []map[string]string, er
 // set auth used
 func (a *Auth) SetAuthUsed(authId string) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 
 	rs, err = db.Exec(db.AR().Update(Table_Auth_Name, map[string]interface{}{"is_used": Auth_Used_False}, map[string]interface{}{
 		"is_used": Auth_Used_True,
@@ -305,7 +320,8 @@ func (a *Auth) SetAuthUsed(authId string) (id int64, err error) {
 func (a *Auth) GetUsedAuth() (auth map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().Select("*").From(Table_Auth_Name).Where(map[string]interface{}{
 		"is_used": Auth_Used_True,
 	}).Limit(0, 1))

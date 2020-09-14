@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 )
 
 const (
@@ -20,7 +20,8 @@ var CollectionModel = Collection{}
 // get collection by collection_id
 func (c *Collection) GetCollectionByCollectionId(collectionId string) (collection map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Collection_Name).Where(map[string]interface{}{
 		"collection_id": collectionId,
 	}))
@@ -34,7 +35,8 @@ func (c *Collection) GetCollectionByCollectionId(collectionId string) (collectio
 // get collections by user_id
 func (c *Collection) GetCollectionsByUserId(userId string) (collections []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Collection_Name).Where(map[string]interface{}{
 		"user_id": userId,
 	}))
@@ -48,7 +50,8 @@ func (c *Collection) GetCollectionsByUserId(userId string) (collections []map[st
 // get collections by user_id
 func (c *Collection) GetCollectionsByUserIdAndType(userId string, typeS int) (collections []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Collection_Name).Where(map[string]interface{}{
 		"user_id": userId,
 		"type":    typeS,
@@ -63,7 +66,8 @@ func (c *Collection) GetCollectionsByUserIdAndType(userId string, typeS int) (co
 // get collections by user_id type and resource_id
 func (c *Collection) GetCollectionByUserIdTypeAndResourceId(userId string, typeS int, resId string) (collection map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Collection_Name).Where(map[string]interface{}{
 		"user_id":     userId,
 		"type":        typeS,
@@ -104,7 +108,8 @@ func (c *Collection) DeleteByResourceIdType(resourceId string, collectType strin
 // insert collection
 func (c *Collection) Insert(collectionValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_Collection_Name, collectionValue))
 	if err != nil {
 		return
@@ -117,7 +122,8 @@ func (c *Collection) Insert(collectionValue map[string]interface{}) (id int64, e
 func (c *Collection) GetCollections() (collections []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Collection_Name))
 	if err != nil {
@@ -131,7 +137,8 @@ func (c *Collection) GetCollections() (collections []map[string]string, err erro
 func (c *Collection) CountCollections() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -146,7 +153,8 @@ func (c *Collection) CountCollections() (count int64, err error) {
 // get collections by many collection_id
 func (c *Collection) GetCollectionsByCollectionIds(collectionIds []string) (collections []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Collection_Name).Where(map[string]interface{}{
 		"collection_id": collectionIds,
 	}))
@@ -159,7 +167,8 @@ func (c *Collection) GetCollectionsByCollectionIds(collectionIds []string) (coll
 
 func (c *Collection) GetResourceIdsOrderByCountLimit(limit int, collectType int) (collects []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("resource_id, count('resource_id') as total").
 		From(Table_Collection_Name).Where(map[string]interface{}{
 		"type": collectType,
@@ -178,7 +187,8 @@ func (c *Collection) GetResourceIdsOrderByCountLimit(limit int, collectType int)
 func (c *Collection) GetCollectionGroupUserId(colType int) (collects []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("user_id, count('user_id') as total").
 		From(Table_Collection_Name).Where(map[string]interface{}{
 		"type": colType,

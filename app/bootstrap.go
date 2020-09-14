@@ -11,7 +11,7 @@ import (
 	"github.com/phachon/mm-wiki/app/utils"
 	"github.com/phachon/mm-wiki/app/work"
 	"github.com/phachon/mm-wiki/global"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"log"
 	"os"
 	"path"
@@ -134,19 +134,35 @@ func initConfig() {
 }
 
 //init db
+//func initDB() {
+//	host := beego.AppConfig.String("db::host")
+//	port, _ := beego.AppConfig.Int("db::port")
+//	user := beego.AppConfig.String("db::user")
+//	pass := beego.AppConfig.String("db::pass")
+//	dbname := beego.AppConfig.String("db::name")
+//	dbTablePrefix := beego.AppConfig.String("db::table_prefix")
+//	maxIdle, _ := beego.AppConfig.Int("db::conn_max_idle")
+//	maxConn, _ := beego.AppConfig.Int("db::conn_max_connection")
+//	models.G = mysql.NewDBGroup("default")
+//	cfg := mysql.NewDBConfigWith(host, port, dbname, user, pass)
+//	cfg.SetMaxIdleConns = maxIdle
+//	cfg.SetMaxOpenConns = maxConn
+//	cfg.TablePrefix = dbTablePrefix
+//	cfg.TablePrefixSqlIdentifier = "__PREFIX__"
+//	err := models.G.Regist("default", cfg)
+//	if err != nil {
+//		logs.Error(fmt.Errorf("database error:%s,with config : %v", err, cfg))
+//		os.Exit(1)
+//	}
+//}
 func initDB() {
 	host := beego.AppConfig.String("db::host")
-	port, _ := beego.AppConfig.Int("db::port")
-	user := beego.AppConfig.String("db::user")
-	pass := beego.AppConfig.String("db::pass")
-	dbname := beego.AppConfig.String("db::name")
+	openMode := beego.AppConfig.String("db::open_mode")
+	cacheMode := beego.AppConfig.String("db::cache_mode")
+	syncMode, _ := beego.AppConfig.Int("db::sync_mode")
 	dbTablePrefix := beego.AppConfig.String("db::table_prefix")
-	maxIdle, _ := beego.AppConfig.Int("db::conn_max_idle")
-	maxConn, _ := beego.AppConfig.Int("db::conn_max_connection")
-	models.G = mysql.NewDBGroup("default")
-	cfg := mysql.NewDBConfigWith(host, port, dbname, user, pass)
-	cfg.SetMaxIdleConns = maxIdle
-	cfg.SetMaxOpenConns = maxConn
+	models.G = sqlite3.NewDBGroup("default")
+	cfg := sqlite3.NewDBConfigWith(host, openMode, cacheMode, syncMode)
 	cfg.TablePrefix = dbTablePrefix
 	cfg.TablePrefixSqlIdentifier = "__PREFIX__"
 	err := models.G.Regist("default", cfg)

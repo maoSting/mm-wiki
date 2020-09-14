@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 )
 
@@ -16,7 +16,8 @@ var LinkModel = Link{}
 // get link by link_id
 func (l *Link) GetLinkByLinkId(linkId string) (link map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Link_Name).Where(map[string]interface{}{
 		"link_id": linkId,
 	}))
@@ -30,7 +31,8 @@ func (l *Link) GetLinkByLinkId(linkId string) (link map[string]string, err error
 // link_id and name is exists
 func (l *Link) HasSameName(linkId, name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Link_Name).Where(map[string]interface{}{
 		"link_id <>": linkId,
 		"name":       name,
@@ -47,7 +49,8 @@ func (l *Link) HasSameName(linkId, name string) (has bool, err error) {
 // name is exists
 func (l *Link) HasLinkName(name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Link_Name).Where(map[string]interface{}{
 		"name": name,
 	}).Limit(0, 1))
@@ -63,7 +66,8 @@ func (l *Link) HasLinkName(name string) (has bool, err error) {
 // get link by name
 func (l *Link) GetLinkByName(name string) (link map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Link_Name).Where(map[string]interface{}{
 		"name": name,
 	}).Limit(0, 1))
@@ -92,7 +96,8 @@ func (l *Link) Insert(linkValue map[string]interface{}) (id int64, err error) {
 	linkValue["create_time"] = time.Now().Unix()
 	linkValue["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_Link_Name, linkValue))
 	if err != nil {
 		return
@@ -104,7 +109,8 @@ func (l *Link) Insert(linkValue map[string]interface{}) (id int64, err error) {
 // update link by link_id
 func (l *Link) Update(linkId string, linkValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	linkValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Link_Name, linkValue, map[string]interface{}{
 		"link_id": linkId,
@@ -120,7 +126,8 @@ func (l *Link) Update(linkId string, linkValue map[string]interface{}) (id int64
 func (l *Link) GetLinksByKeywordAndLimit(keyword string, limit int, number int) (links []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Link_Name).Where(map[string]interface{}{
 		"name LIKE": "%" + keyword + "%",
 	}).Limit(limit, number).OrderBy("link_id", "DESC"))
@@ -136,7 +143,8 @@ func (l *Link) GetLinksByKeywordAndLimit(keyword string, limit int, number int) 
 func (l *Link) GetLinksByLimit(limit int, number int) (links []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			From(Table_Link_Name).
@@ -154,7 +162,8 @@ func (l *Link) GetLinksByLimit(limit int, number int) (links []map[string]string
 func (l *Link) GetLinks() (links []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Link_Name))
 	if err != nil {
@@ -168,7 +177,8 @@ func (l *Link) GetLinks() (links []map[string]string, err error) {
 func (l *Link) GetLinksOrderBySequence() (links []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Link_Name).OrderBy("sequence", "ASC"))
 	if err != nil {
@@ -182,7 +192,8 @@ func (l *Link) GetLinksOrderBySequence() (links []map[string]string, err error) 
 func (l *Link) CountLinks() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -198,7 +209,8 @@ func (l *Link) CountLinks() (count int64, err error) {
 func (l *Link) CountLinksByKeyword(keyword string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().
 		Select("count(*) as total").
 		From(Table_Link_Name).
@@ -215,7 +227,8 @@ func (l *Link) CountLinksByKeyword(keyword string) (count int64, err error) {
 // get links by like name
 func (l *Link) GetLinksByLikeName(name string) (links []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Link_Name).Where(map[string]interface{}{
 		"name Like": "%" + name + "%",
 	}).Limit(0, 1))
@@ -229,7 +242,8 @@ func (l *Link) GetLinksByLikeName(name string) (links []map[string]string, err e
 // get link by many link_id
 func (l *Link) GetLinkByLinkIds(linkIds []string) (links []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Link_Name).Where(map[string]interface{}{
 		"link_id": linkIds,
 	}))

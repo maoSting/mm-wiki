@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/astaxie/beego/context"
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"strings"
 	"time"
 )
@@ -30,7 +30,8 @@ var LogModel = Log{}
 // 根据 log_id 获取日志
 func (l *Log) GetLogByLogId(logId string) (log map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Log_Name).Where(map[string]interface{}{
 		"log_id": logId,
 	}))
@@ -47,7 +48,8 @@ func (l *Log) Insert(log map[string]interface{}) (id int64, err error) {
 	log["create_time"] = time.Now().Unix()
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_Log_Name, log))
 	if err != nil {
 		return
@@ -70,7 +72,8 @@ func (l *Log) GetLogsByKeywordAndLimit(level, message, username string, limit in
 	if username != "" {
 		where["username LIKE"] = "%" + username + "%"
 	}
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Log_Name).Where(where).Limit(limit, number).OrderBy("log_id", "DESC"))
 	if err != nil {
 		return
@@ -84,7 +87,8 @@ func (l *Log) GetLogsByKeywordAndLimit(level, message, username string, limit in
 func (l *Log) GetLogsByLimit(limit int, number int) (logs []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			From(Table_Log_Name).
@@ -102,7 +106,8 @@ func (l *Log) GetLogsByLimit(limit int, number int) (logs []map[string]string, e
 func (l *Log) CountLogs() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -117,7 +122,8 @@ func (l *Log) CountLogs() (count int64, err error) {
 func (l *Log) CountLogsByLevel(level int) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -146,7 +152,8 @@ func (l *Log) CountLogsByKeyword(level, message, username string) (count int64, 
 	if username != "" {
 		where["username LIKE"] = "%" + username + "%"
 	}
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().
 		Select("count(*) as total").
 		From(Table_Log_Name).

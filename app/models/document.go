@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"strconv"
 	"strings"
 	"time"
@@ -28,7 +28,8 @@ var DocumentModel = Document{}
 // get document by document_id
 func (d *Document) GetDocumentByDocumentId(documentId string) (document map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"document_id": documentId,
 		"is_delete":   Document_Delete_False,
@@ -43,7 +44,8 @@ func (d *Document) GetDocumentByDocumentId(documentId string) (document map[stri
 // get documents by parent_id
 func (d *Document) GetDocumentsByParentId(parentId string) (documents []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"parent_id": parentId,
 		"is_delete": Document_Delete_False,
@@ -58,7 +60,8 @@ func (d *Document) GetDocumentsByParentId(parentId string) (documents []map[stri
 // get document by name
 func (d *Document) GetDocumentsByName(name string) (documents []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"name":      name,
 		"is_delete": Document_Delete_False,
@@ -73,7 +76,8 @@ func (d *Document) GetDocumentsByName(name string) (documents []map[string]strin
 // get document by name and spaceId
 func (d *Document) GetDocumentByNameAndSpaceId(name string, spaceId string) (document map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"name":      name,
 		"space_id":  spaceId,
@@ -89,7 +93,8 @@ func (d *Document) GetDocumentByNameAndSpaceId(name string, spaceId string) (doc
 // get document by name and spaceId
 func (d *Document) GetDocumentByNameParentIdAndSpaceId(name string, parentId string, spaceId string, docType int) (document map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"name":      name,
 		"space_id":  spaceId,
@@ -107,7 +112,8 @@ func (d *Document) GetDocumentByNameParentIdAndSpaceId(name string, parentId str
 // get document by name and spaceId
 func (d *Document) GetDocumentByParentIdAndSpaceId(parentId string, spaceId string, docType int) (document map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"space_id":  spaceId,
 		"parent_id": parentId,
@@ -124,7 +130,8 @@ func (d *Document) GetDocumentByParentIdAndSpaceId(parentId string, spaceId stri
 // get document by name and spaceId
 func (d *Document) GetDocumentsByParentIdAndSpaceIdOnly(parentId string, spaceId string) (document []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"space_id":  spaceId,
 		"parent_id": parentId,
@@ -140,7 +147,8 @@ func (d *Document) GetDocumentsByParentIdAndSpaceIdOnly(parentId string, spaceId
 // get max sequence
 func (d *Document) GetDocumentMaxSequence(parentId string, spaceId string) (sequence int, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"space_id":  spaceId,
 		"parent_id": parentId,
@@ -159,7 +167,8 @@ func (d *Document) GetDocumentMaxSequence(parentId string, spaceId string) (sequ
 // delete document by document_id
 func (d *Document) DeleteDBAndFile(documentId string, spaceId string, userId string, pageFile string, docType string) (err error) {
 	db := G.DB()
-	tx, err := db.Begin(db.Config)
+	//tx, err := db.Begin(db.Config)
+	tx, err := db.Begin()
 	if err != nil {
 		return
 	}
@@ -219,7 +228,8 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 
 	db := G.DB()
 	// start db begin
-	tx, err := db.Begin(db.Config)
+	//tx, err := db.Begin(db.Config)
+	tx, err := db.Begin()
 	if err != nil {
 		return
 	}
@@ -236,7 +246,8 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 	sequence += 1
 	documentValue["sequence"] = strconv.Itoa(sequence)
 
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	documentValue["create_time"] = time.Now().Unix()
 	documentValue["update_time"] = time.Now().Unix()
 	rs, err = db.ExecTx(db.AR().Insert(Table_Document_Name, documentValue), tx)
@@ -287,7 +298,8 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 // update document by document_id
 func (d *Document) Update(documentId string, documentValue map[string]interface{}, comment string, spaceId string) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	documentValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Document_Name, documentValue, map[string]interface{}{
 		"document_id": documentId,
@@ -320,7 +332,8 @@ func (d *Document) Update(documentId string, documentValue map[string]interface{
 // 批量移动更新文档序号
 func (d *Document) MoveSequenceBySpaceIdAndGtSequence(spaceId string, startSequence int, n int) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	//documentValue := map[string]interface{}{
 	//	"sequence": fmt.Sprintf("(sequence+%d)", n),
 	//	"update_time": time.Now().Unix(),
@@ -344,11 +357,13 @@ func (d *Document) MoveDBAndFile(documentId string, spaceId string, updateValue 
 	oldPageFile string, newPageFile string, docType string, comment string) (id int64, err error) {
 
 	db := G.DB()
-	tx, err := db.Begin(db.Config)
+	// tx, err := db.Begin(db.Config)
+	tx, err := db.Begin()
 	if err != nil {
 		return
 	}
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	updateValue["update_time"] = time.Now().Unix()
 	rs, err = db.ExecTx(db.AR().Update(Table_Document_Name, updateValue, map[string]interface{}{
 		"document_id": documentId,
@@ -391,11 +406,13 @@ func (d *Document) UpdateDBAndFile(documentId string, spaceId string, document m
 	}
 	// begin update
 	db := G.DB()
-	tx, err := db.Begin(db.Config)
+	// tx, err := db.Begin(db.Config)
+	tx, err := db.Begin()
 	if err != nil {
 		return
 	}
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	updateValue["update_time"] = time.Now().Unix()
 	rs, err = db.ExecTx(db.AR().Update(Table_Document_Name, updateValue, map[string]interface{}{
 		"document_id": documentId,
@@ -442,7 +459,8 @@ func (d *Document) UpdateDBAndFile(documentId string, spaceId string, document m
 func (d *Document) GetDocumentsBySpaceId(spaceId string) (documents []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 			"space_id":  spaceId,
@@ -459,7 +477,8 @@ func (d *Document) GetDocumentsBySpaceId(spaceId string) (documents []map[string
 func (d *Document) GetDocumentsBySpaceIdAndParentId(spaceId string, parentId string) (documents []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 			"space_id":  spaceId,
@@ -477,7 +496,8 @@ func (d *Document) GetDocumentsBySpaceIdAndParentId(spaceId string, parentId str
 func (d *Document) GetSpaceDefaultDocument(spaceId string) (document map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 			"space_id":  spaceId,
@@ -495,7 +515,8 @@ func (d *Document) GetSpaceDefaultDocument(spaceId string) (document map[string]
 func (d *Document) GetAllSpaceDocuments(spaceId string) (documents []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 			"space_id":    spaceId,
@@ -513,7 +534,8 @@ func (d *Document) GetAllSpaceDocuments(spaceId string) (documents []map[string]
 func (d *Document) CountDocumentsBySpaceId(spaceId string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -533,7 +555,8 @@ func (d *Document) CountDocumentsBySpaceId(spaceId string) (count int64, err err
 func (d *Document) CountDocuments() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -551,7 +574,8 @@ func (d *Document) CountDocuments() (count int64, err error) {
 // get document by name
 func (d *Document) GetDocumentsByLikeName(name string) (documents []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"name Like": "%" + name + "%",
 		"is_delete": Document_Delete_False,
@@ -566,7 +590,8 @@ func (d *Document) GetDocumentsByLikeName(name string) (documents []map[string]s
 // get document link name and limit
 func (d *Document) GetDocumentsByLikeNameAndLimit(name string, limit int, number int) (documents []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"name Like": "%" + name + "%",
 		"is_delete": Document_Delete_False,
@@ -582,7 +607,8 @@ func (d *Document) GetDocumentsByLikeNameAndLimit(name string, limit int, number
 func (d *Document) CountDocumentsLikeName(name string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -601,7 +627,8 @@ func (d *Document) CountDocumentsLikeName(name string) (count int64, err error) 
 // get document by spaceId and document_ids
 func (d *Document) GetDocumentsByDocumentIds(documentIds []string) (documents []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"document_id": documentIds,
 		"is_delete":   Document_Delete_False,
@@ -615,7 +642,8 @@ func (d *Document) GetDocumentsByDocumentIds(documentIds []string) (documents []
 
 func (d *Document) GetAllDocumentsByDocumentIds(documentIds []string) (documents []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"document_id": documentIds,
 	}))
@@ -628,7 +656,8 @@ func (d *Document) GetAllDocumentsByDocumentIds(documentIds []string) (documents
 
 func (d *Document) GetAllDocuments() (documents []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"is_delete": Document_Delete_False,
 	}))
@@ -671,7 +700,8 @@ func (d *Document) GetParentDocumentsByPath(path string) (parentDocuments []map[
 
 func (d *Document) GetSpaceIdsOrderByCountDocumentLimit(limit int) (documents []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("space_id, count('space_id') as total").
 		From(Table_Document_Name).Where(map[string]interface{}{
 		"is_delete": Document_Delete_False,
@@ -695,7 +725,8 @@ func (d *Document) GetCountGroupByCreateTime(startTime int64) (documents []map[s
 
 	/*select DATE_FORMAT(FROM_UNIXTIME(time),"%Y-%m-%d") from tcm_fund_list group by DATE_FORMAT(FROM_UNIXTIME(time),"%Y-%m-%d")*/
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("DATE_FORMAT(FROM_UNIXTIME(create_time),'%Y-%m-%d') as date, count('date') as total").
 		From(Table_Document_Name).Where(map[string]interface{}{
 		"is_delete":      Document_Delete_False,
@@ -712,7 +743,8 @@ func (d *Document) GetCountGroupByCreateTime(startTime int64) (documents []map[s
 func (d *Document) GetDocumentGroupCreateUserId() (documents []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("create_user_id, count('create_user_id') as total").
 		From(Table_Document_Name).Where(map[string]interface{}{
 		"is_delete": Document_Delete_False,
@@ -728,7 +760,8 @@ func (d *Document) GetDocumentGroupCreateUserId() (documents []map[string]string
 func (d *Document) GetDocumentGroupEditUserId() (documents []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	sql := db.AR().Select("edit_user_id, count('edit_user_id') as total").
 		From(Table_Document_Name).Where(map[string]interface{}{
 		"is_delete": Document_Delete_False,

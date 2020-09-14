@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 )
 
@@ -21,7 +21,8 @@ var EmailModel = Email{}
 // get email by email_id
 func (u *Email) GetEmailByEmailId(emailId string) (email map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Email_Name).Where(map[string]interface{}{
 		"email_id": emailId,
 	}))
@@ -35,7 +36,8 @@ func (u *Email) GetEmailByEmailId(emailId string) (email map[string]string, err 
 // email_id and name is exists
 func (u *Email) HasSameName(emailId, name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Email_Name).Where(map[string]interface{}{
 		"email_id <>": emailId,
 		"name":        name,
@@ -52,7 +54,8 @@ func (u *Email) HasSameName(emailId, name string) (has bool, err error) {
 // name is exists
 func (u *Email) HasEmailName(name string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Email_Name).Where(map[string]interface{}{
 		"name": name,
 	}).Limit(0, 1))
@@ -68,7 +71,8 @@ func (u *Email) HasEmailName(name string) (has bool, err error) {
 // get email by name
 func (u *Email) GetEmailByName(name string) (email map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Email_Name).Where(map[string]interface{}{
 		"name": name,
 	}).Limit(0, 1))
@@ -94,7 +98,8 @@ func (u *Email) Delete(emailId string) (err error) {
 // insert email
 func (u *Email) Insert(emailValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 
 	// is_used
 	rs, err = db.Query(db.AR().From(Table_Email_Name).Where(map[string]interface{}{
@@ -122,7 +127,8 @@ func (u *Email) Insert(emailValue map[string]interface{}) (id int64, err error) 
 // update email by email_id
 func (u *Email) Update(emailId string, emailValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	emailValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_Email_Name, emailValue, map[string]interface{}{
 		"email_id": emailId,
@@ -138,7 +144,8 @@ func (u *Email) Update(emailId string, emailValue map[string]interface{}) (id in
 func (u *Email) GetEmailsByKeywordAndLimit(keyword string, limit int, number int) (emails []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Email_Name).Where(map[string]interface{}{
 		"name LIKE": "%" + keyword + "%",
 	}).Limit(limit, number).OrderBy("email_id", "DESC"))
@@ -154,7 +161,8 @@ func (u *Email) GetEmailsByKeywordAndLimit(keyword string, limit int, number int
 func (u *Email) GetEmailsByLimit(limit int, number int) (emails []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			From(Table_Email_Name).
@@ -172,7 +180,8 @@ func (u *Email) GetEmailsByLimit(limit int, number int) (emails []map[string]str
 func (u *Email) GetEmails() (emails []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_Email_Name))
 	if err != nil {
@@ -186,7 +195,8 @@ func (u *Email) GetEmails() (emails []map[string]string, err error) {
 func (u *Email) GetUsedEmail() (email map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().Select("*").From(Table_Email_Name).Where(map[string]interface{}{
 		"is_used": Email_Used_True,
 	}).Limit(0, 1))
@@ -201,7 +211,8 @@ func (u *Email) GetUsedEmail() (email map[string]string, err error) {
 func (u *Email) CountEmails() (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().
 			Select("count(*) as total").
@@ -217,7 +228,8 @@ func (u *Email) CountEmails() (count int64, err error) {
 func (u *Email) CountEmailsByKeyword(keyword string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().
 		Select("count(*) as total").
 		From(Table_Email_Name).
@@ -234,7 +246,8 @@ func (u *Email) CountEmailsByKeyword(keyword string) (count int64, err error) {
 // get emails by like name
 func (u *Email) GetEmailsByLikeName(name string) (emails []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Email_Name).Where(map[string]interface{}{
 		"name Like": "%" + name + "%",
 	}).Limit(0, 1))
@@ -248,7 +261,8 @@ func (u *Email) GetEmailsByLikeName(name string) (emails []map[string]string, er
 // get email by many email_id
 func (u *Email) GetEmailByEmailIds(emailIds []string) (emails []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Email_Name).Where(map[string]interface{}{
 		"email_id": emailIds,
 	}))
@@ -262,7 +276,8 @@ func (u *Email) GetEmailByEmailIds(emailIds []string) (emails []map[string]strin
 // set email used
 func (u *Email) SetEmailUsed(emailId string) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 
 	rs, err = db.Exec(db.AR().Update(Table_Email_Name, map[string]interface{}{"is_used": Email_Used_False}, map[string]interface{}{
 		"is_used": Email_Used_True,

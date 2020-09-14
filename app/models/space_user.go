@@ -2,7 +2,8 @@ package models
 
 import (
 	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/snail007/go-activerecord/mysql"
+	"github.com/snail007/go-activerecord/sqlite3"
+
 	"time"
 )
 
@@ -22,7 +23,8 @@ var SpaceUserModel = SpaceUser{}
 // get space_user by space_user_id
 func (s *SpaceUser) GetSpaceUserBySpaceUserId(spaceUserId string) (spaceUser map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_SpaceUser_Name).Where(map[string]interface{}{
 		"space_user_id": spaceUserId,
 	}))
@@ -36,7 +38,8 @@ func (s *SpaceUser) GetSpaceUserBySpaceUserId(spaceUserId string) (spaceUser map
 // get space_user by name
 func (s *SpaceUser) GetSpaceUsersByUserId(userId string) (spaceUsers []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_SpaceUser_Name).Where(map[string]interface{}{
 		"user_id": userId,
 	}))
@@ -50,7 +53,8 @@ func (s *SpaceUser) GetSpaceUsersByUserId(userId string) (spaceUsers []map[strin
 // get space_user by name
 func (s *SpaceUser) GetSpaceUsersBySpaceId(spaceId string) (spaceUsers []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_SpaceUser_Name).Where(map[string]interface{}{
 		"space_id": spaceId,
 	}))
@@ -65,7 +69,8 @@ func (s *SpaceUser) GetSpaceUsersBySpaceId(spaceId string) (spaceUsers []map[str
 func (s *SpaceUser) GetSpaceUserBySpaceIdAndUserId(spaceId string, userId string) (spaceUser map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_SpaceUser_Name).Where(map[string]interface{}{
 		"space_id": spaceId,
 		"user_id":  userId,
@@ -132,7 +137,8 @@ func (s *SpaceUser) Insert(spaceUserValue map[string]interface{}) (id int64, err
 	spaceUserValue["create_time"] = time.Now().Unix()
 	spaceUserValue["update_time"] = time.Now().Unix()
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Exec(db.AR().Insert(Table_SpaceUser_Name, spaceUserValue))
 	if err != nil {
 		return
@@ -144,7 +150,8 @@ func (s *SpaceUser) Insert(spaceUserValue map[string]interface{}) (id int64, err
 // update space_user by space_user_id
 func (s *SpaceUser) Update(spaceUserId string, spaceUserValue map[string]interface{}) (id int64, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	spaceUserValue["update_time"] = time.Now().Unix()
 	rs, err = db.Exec(db.AR().Update(Table_SpaceUser_Name, spaceUserValue, map[string]interface{}{
 		"space_user_id": spaceUserId,
@@ -160,7 +167,8 @@ func (s *SpaceUser) Update(spaceUserId string, spaceUserValue map[string]interfa
 func (s *SpaceUser) GetSpaceUsersBySpaceIdAndLimit(spaceId string, limit int, number int) (spaceUsers []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_SpaceUser_Name).Where(map[string]interface{}{
 		"space_id": spaceId,
 	}).Limit(limit, number))
@@ -176,7 +184,8 @@ func (s *SpaceUser) GetSpaceUsersBySpaceIdAndLimit(spaceId string, limit int, nu
 func (s *SpaceUser) GetSpaceUsers() (spaceUsers []map[string]string, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(
 		db.AR().From(Table_SpaceUser_Name))
 	if err != nil {
@@ -190,7 +199,8 @@ func (s *SpaceUser) GetSpaceUsers() (spaceUsers []map[string]string, err error) 
 func (s *SpaceUser) CountSpaceUsersBySpaceId(spaceId string) (count int64, err error) {
 
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().
 		Select("count(*) as total").
 		From(Table_SpaceUser_Name).
@@ -207,7 +217,8 @@ func (s *SpaceUser) CountSpaceUsersBySpaceId(spaceId string) (count int64, err e
 // get space_user by many space_user_id
 func (s *SpaceUser) GetSpaceUsersBySpaceUserIds(spaceUserIds []string) (spaceUsers []map[string]string, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_SpaceUser_Name).Where(map[string]interface{}{
 		"space_user_id": spaceUserIds,
 	}))
@@ -221,7 +232,8 @@ func (s *SpaceUser) GetSpaceUsersBySpaceUserIds(spaceUserIds []string) (spaceUse
 // space user is exists
 func (s *SpaceUser) HasSpaceUser(spaceId string, userId string) (has bool, err error) {
 	db := G.DB()
-	var rs *mysql.ResultSet
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Role_Name).Where(map[string]interface{}{
 		"space_id": spaceId,
 		"user_id":  userId,
