@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/astaxie/beego"
+	"github.com/phachon/mm-wiki/app/utils"
 	"github.com/phachon/mm-wiki/install/storage"
 	"log"
 	"os"
@@ -23,6 +24,9 @@ func main() {
 		log.Println("MM-Wiki already installed!")
 		os.Exit(1)
 	}
+
+	// add template func
+	beego.AddFuncMap("dateFormat", utils.NewDate().Format)
 
 	//beego.BConfig.RunMode = "prod"
 	beego.Run(":" + *port)

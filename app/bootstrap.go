@@ -57,6 +57,7 @@ func init() {
 	initSearch()
 	initWork()
 	StartTime = time.Now().Unix()
+	beego.AddFuncMap("dateFormat", utils.Date.Format)
 }
 
 // init flag
