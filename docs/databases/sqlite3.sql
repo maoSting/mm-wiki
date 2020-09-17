@@ -18,7 +18,7 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 -- Table structure for mw_attachment
 -- ----------------------------
-DROP TABLE "mw_attachment";
+DROP TABLE IF EXISTS "mw_attachment";
 CREATE TABLE "mw_attachment" (
   "attachment_id" integer(8) NOT NULL,
   "user_id" integer(8),
@@ -39,7 +39,7 @@ INSERT INTO "mw_attachment" VALUES (1, 1, 3, '220px-Chou_Chuan-huing_2.jpg', 'im
 -- ----------------------------
 -- Table structure for mw_collection
 -- ----------------------------
-DROP TABLE "mw_collection";
+ DROP TABLE IF EXISTS "mw_collection";
 CREATE TABLE "mw_collection" (
   "collection_id" integer(8) NOT NULL,
   "user_id" integer(8),
@@ -52,7 +52,7 @@ CREATE TABLE "mw_collection" (
 -- ----------------------------
 -- Table structure for mw_config
 -- ----------------------------
-DROP TABLE "mw_config";
+ DROP TABLE IF EXISTS "mw_config";
 CREATE TABLE "mw_config" (
   "config_id" integer(8) NOT NULL,
   "name" TEXT(255),
@@ -79,7 +79,7 @@ INSERT INTO "mw_config" VALUES (9, '系统版本号', 'system_version', 'v0.2.0'
 -- ----------------------------
 -- Table structure for mw_contact
 -- ----------------------------
-DROP TABLE "mw_contact";
+ DROP TABLE IF EXISTS "mw_contact";
 CREATE TABLE "mw_contact" (
   "contact_id" integer(8) NOT NULL,
   "name" TEXT(255),
@@ -94,7 +94,7 @@ CREATE TABLE "mw_contact" (
 -- ----------------------------
 -- Table structure for mw_document
 -- ----------------------------
-DROP TABLE "mw_document";
+ DROP TABLE IF EXISTS "mw_document";
 CREATE TABLE "mw_document" (
   "document_id" integer(8) NOT NULL,
   "parent_id" integer(8),
@@ -121,7 +121,7 @@ INSERT INTO "mw_document" VALUES (3, 1, 1, '小刚', 1, '0,1', 2, 1, 1, 0, 15998
 -- ----------------------------
 -- Table structure for mw_email
 -- ----------------------------
-DROP TABLE "mw_email";
+ DROP TABLE IF EXISTS "mw_email";
 CREATE TABLE "mw_email" (
   "email_id" integer(10) NOT NULL,
   "name" TEXT(255),
@@ -142,7 +142,7 @@ CREATE TABLE "mw_email" (
 -- ----------------------------
 -- Table structure for mw_follow
 -- ----------------------------
-DROP TABLE "mw_follow";
+ DROP TABLE IF EXISTS "mw_follow";
 CREATE TABLE "mw_follow" (
   "follow_id" integer(8) NOT NULL,
   "user_id" integer(8),
@@ -161,7 +161,7 @@ INSERT INTO "mw_follow" VALUES (2, 1, 1, 3, 1599832198);
 -- ----------------------------
 -- Table structure for mw_link
 -- ----------------------------
-DROP TABLE "mw_link";
+ DROP TABLE IF EXISTS "mw_link";
 CREATE TABLE "mw_link" (
   "link_id" integer(8) NOT NULL,
   "name" TEXT(255),
@@ -175,7 +175,7 @@ CREATE TABLE "mw_link" (
 -- ----------------------------
 -- Table structure for mw_log
 -- ----------------------------
-DROP TABLE "mw_log";
+ DROP TABLE IF EXISTS "mw_log";
 CREATE TABLE "mw_log" (
   "log_id" integer(20) NOT NULL,
   "level" integer(2),
@@ -210,7 +210,7 @@ INSERT INTO "mw_log" VALUES (11, 6, '/page/modify', '/page/modify', '{"comment":
 -- ----------------------------
 -- Table structure for mw_log_document
 -- ----------------------------
-DROP TABLE "mw_log_document";
+ DROP TABLE IF EXISTS "mw_log_document";
 CREATE TABLE "mw_log_document" (
   "log_document_id" integer(8) NOT NULL,
   "document_id" integer(8),
@@ -236,7 +236,7 @@ INSERT INTO "mw_log_document" VALUES (7, 3, 1, 1, 2, '添加照片', 1600054958)
 -- ----------------------------
 -- Table structure for mw_login_auth
 -- ----------------------------
-DROP TABLE "mw_login_auth";
+ DROP TABLE IF EXISTS "mw_login_auth";
 CREATE TABLE "mw_login_auth" (
   "login_auth_id" integer(8) NOT NULL,
   "name" TEXT(255),
@@ -253,7 +253,7 @@ CREATE TABLE "mw_login_auth" (
 -- ----------------------------
 -- Table structure for mw_privilege
 -- ----------------------------
-DROP TABLE "mw_privilege";
+ DROP TABLE IF EXISTS "mw_privilege";
 CREATE TABLE "mw_privilege" (
   "privilege_id" integer(8) NOT NULL,
   "name" TEXT(255),
@@ -370,7 +370,7 @@ INSERT INTO "mw_privilege" VALUES (93, '导入联系人', 71, 'controller', 'con
 -- ----------------------------
 -- Table structure for mw_role
 -- ----------------------------
-DROP TABLE "mw_role";
+ DROP TABLE IF EXISTS "mw_role";
 CREATE TABLE "mw_role" (
   "role_id" integer(8) NOT NULL,
   "name" TEXT(255),
@@ -391,7 +391,7 @@ INSERT INTO "mw_role" VALUES (3, '普通用户', 1, 0, 1599820462, 1599820462);
 -- ----------------------------
 -- Table structure for mw_role_privilege
 -- ----------------------------
-DROP TABLE "mw_role_privilege";
+ DROP TABLE IF EXISTS "mw_role_privilege";
 CREATE TABLE "mw_role_privilege" (
   "role_privilege_id" integer(8) NOT NULL,
   "role_id" integer(8),
@@ -437,7 +437,7 @@ INSERT INTO "mw_role_privilege" VALUES (30, 2, 48, 1599820465);
 -- ----------------------------
 -- Table structure for mw_space
 -- ----------------------------
-DROP TABLE "mw_space";
+ DROP TABLE IF EXISTS "mw_space";
 CREATE TABLE "mw_space" (
   "space_id" integer(8) NOT NULL,
   "name" TEXT(255),
@@ -460,7 +460,7 @@ INSERT INTO "mw_space" VALUES (1, '内地', NULL, NULL, 'public', 1, 0, 0, 15998
 -- ----------------------------
 -- Table structure for mw_space_user
 -- ----------------------------
-DROP TABLE "mw_space_user";
+ DROP TABLE IF EXISTS "mw_space_user";
 CREATE TABLE "mw_space_user" (
   "space_user_id" integer(8) NOT NULL,
   "user_id" integer(8),
@@ -479,7 +479,7 @@ INSERT INTO "mw_space_user" VALUES (1, 1, 1, 2, 1599820732, 1599820732);
 -- ----------------------------
 -- Table structure for mw_user
 -- ----------------------------
-DROP TABLE "mw_user";
+ DROP TABLE IF EXISTS "mw_user";
 CREATE TABLE "mw_user" (
   "user_id" integer(8) NOT NULL,
   "username" TEXT(255),
