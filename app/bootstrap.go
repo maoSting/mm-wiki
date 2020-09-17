@@ -157,12 +157,18 @@ func initConfig() {
 //	}
 //}
 func initDB() {
-	host := beego.AppConfig.String("db::host")
+	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+	filename := beego.AppConfig.String("db::host")
+	host := filepath.Join(dir, filename)
+	fmt.Println("initDb")
+	fmt.Println(host)
+
 	openMode := beego.AppConfig.String("db::open_mode")
 	cacheMode := beego.AppConfig.String("db::cache_mode")
 	syncMode, _ := beego.AppConfig.Int("db::sync_mode")
 	dbTablePrefix := beego.AppConfig.String("db::table_prefix")
 	models.G = sqlite3.NewDBGroup("default")
+
 	cfg := sqlite3.NewDBConfigWith(host, openMode, cacheMode, syncMode)
 	cfg.TablePrefix = dbTablePrefix
 	cfg.TablePrefixSqlIdentifier = "__PREFIX__"
