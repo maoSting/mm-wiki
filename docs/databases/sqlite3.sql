@@ -1,16 +1,16 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : mm-wiki
+ Source Server         : wiki
  Source Server Type    : SQLite
- Source Server Version : 2008017
+ Source Server Version : 3021000
  Source Schema         : main
 
  Target Server Type    : SQLite
- Target Server Version : 2008017
+ Target Server Version : 3021000
  File Encoding         : 65001
 
- Date: 16/09/2020 11:17:48
+ Date: 22/09/2020 17:59:29
 */
 
 PRAGMA foreign_keys = false;
@@ -20,15 +20,14 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 DROP TABLE IF EXISTS "mw_attachment";
 CREATE TABLE "mw_attachment" (
-  "attachment_id" integer(8) NOT NULL,
+  "attachment_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "user_id" integer(8),
   "document_id" integer(8),
   "name" TEXT(255),
   "path" TEXT(255),
   "source" integer(2),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("attachment_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
@@ -39,28 +38,26 @@ INSERT INTO "mw_attachment" VALUES (1, 1, 3, '220px-Chou_Chuan-huing_2.jpg', 'im
 -- ----------------------------
 -- Table structure for mw_collection
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_collection";
+DROP TABLE IF EXISTS "mw_collection";
 CREATE TABLE "mw_collection" (
-  "collection_id" integer(8) NOT NULL,
+  "collection_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "user_id" integer(8),
   "type" integer(2),
   "resource_id" integer(8),
-  "create_time" integer(8),
-  PRIMARY KEY ("collection_id")
+  "create_time" integer(8)
 );
 
 -- ----------------------------
 -- Table structure for mw_config
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_config";
+DROP TABLE IF EXISTS "mw_config";
 CREATE TABLE "mw_config" (
-  "config_id" integer(8) NOT NULL,
+  "config_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT(255),
   "key" TEXT(255),
   "value" TEXT(255),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("config_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
@@ -79,24 +76,23 @@ INSERT INTO "mw_config" VALUES (9, '系统版本号', 'system_version', 'v0.2.0'
 -- ----------------------------
 -- Table structure for mw_contact
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_contact";
+DROP TABLE IF EXISTS "mw_contact";
 CREATE TABLE "mw_contact" (
-  "contact_id" integer(8) NOT NULL,
+  "contact_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT(255),
   "mobile" TEXT(255),
   "email" TEXT(255),
   "position" TEXT(255),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("contact_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
 -- Table structure for mw_document
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_document";
+DROP TABLE IF EXISTS "mw_document";
 CREATE TABLE "mw_document" (
-  "document_id" integer(8) NOT NULL,
+  "document_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "parent_id" integer(8),
   "space_id" integer(8),
   "name" TEXT(255),
@@ -107,8 +103,7 @@ CREATE TABLE "mw_document" (
   "edit_user_id" integer(8),
   "is_delete" integer(2),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("document_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
@@ -121,9 +116,9 @@ INSERT INTO "mw_document" VALUES (3, 1, 1, '小刚', 1, '0,1', 2, 1, 1, 0, 15998
 -- ----------------------------
 -- Table structure for mw_email
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_email";
+DROP TABLE IF EXISTS "mw_email";
 CREATE TABLE "mw_email" (
-  "email_id" integer(10) NOT NULL,
+  "email_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT(255),
   "sender_address" TEXT(255),
   "sender_name" TEXT(255),
@@ -135,21 +130,19 @@ CREATE TABLE "mw_email" (
   "is_ssl" integer(2),
   "is_used" integer(2),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("email_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
 -- Table structure for mw_follow
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_follow";
+DROP TABLE IF EXISTS "mw_follow";
 CREATE TABLE "mw_follow" (
-  "follow_id" integer(8) NOT NULL,
+  "follow_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "user_id" integer(8),
   "type" integer(2),
   "object_id" integer(8),
-  "create_time" integer(8),
-  PRIMARY KEY ("follow_id")
+  "create_time" integer(8)
 );
 
 -- ----------------------------
@@ -161,23 +154,22 @@ INSERT INTO "mw_follow" VALUES (2, 1, 1, 3, 1599832198);
 -- ----------------------------
 -- Table structure for mw_link
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_link";
+DROP TABLE IF EXISTS "mw_link";
 CREATE TABLE "mw_link" (
-  "link_id" integer(8) NOT NULL,
+  "link_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT(255),
   "url" TEXT(255),
   "sequence" integer(8),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("link_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
 -- Table structure for mw_log
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_log";
+DROP TABLE IF EXISTS "mw_log";
 CREATE TABLE "mw_log" (
-  "log_id" integer(20) NOT NULL,
+  "log_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "level" integer(2),
   "path" TEXT(255),
   "get" TEXT(255),
@@ -188,8 +180,7 @@ CREATE TABLE "mw_log" (
   "referer" TEXT(255),
   "user_id" integer(8),
   "username" TEXT(255),
-  "create_time" integer(8),
-  PRIMARY KEY ("log_id")
+  "create_time" integer(8)
 );
 
 -- ----------------------------
@@ -210,16 +201,15 @@ INSERT INTO "mw_log" VALUES (11, 6, '/page/modify', '/page/modify', '{"comment":
 -- ----------------------------
 -- Table structure for mw_log_document
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_log_document";
+DROP TABLE IF EXISTS "mw_log_document";
 CREATE TABLE "mw_log_document" (
-  "log_document_id" integer(8) NOT NULL,
+  "log_document_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "document_id" integer(8),
   "space_id" integer(8),
   "user_id" integer(8),
   "action" integer(2),
   "comment" TEXT(255),
-  "create_time" integer(8),
-  PRIMARY KEY ("log_document_id")
+  "create_time" integer(8)
 );
 
 -- ----------------------------
@@ -236,9 +226,9 @@ INSERT INTO "mw_log_document" VALUES (7, 3, 1, 1, 2, '添加照片', 1600054958)
 -- ----------------------------
 -- Table structure for mw_login_auth
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_login_auth";
+DROP TABLE IF EXISTS "mw_login_auth";
 CREATE TABLE "mw_login_auth" (
-  "login_auth_id" integer(8) NOT NULL,
+  "login_auth_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT(255),
   "username_prefix" TEXT(255),
   "url" TEXT(255),
@@ -246,16 +236,15 @@ CREATE TABLE "mw_login_auth" (
   "is_used" integer(2),
   "is_delete" integer(2),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("login_auth_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
 -- Table structure for mw_privilege
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_privilege";
+DROP TABLE IF EXISTS "mw_privilege";
 CREATE TABLE "mw_privilege" (
-  "privilege_id" integer(8) NOT NULL,
+  "privilege_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT(255),
   "parent_id" integer(8),
   "type" TEXT(255),
@@ -266,8 +255,7 @@ CREATE TABLE "mw_privilege" (
   "is_display" integer(2),
   "sequence" integer(8),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("privilege_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
@@ -370,15 +358,14 @@ INSERT INTO "mw_privilege" VALUES (93, '导入联系人', 71, 'controller', 'con
 -- ----------------------------
 -- Table structure for mw_role
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_role";
+DROP TABLE IF EXISTS "mw_role";
 CREATE TABLE "mw_role" (
-  "role_id" integer(8) NOT NULL,
+  "role_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT(255),
   "type" integer(2),
   "is_delete" integer(2),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("role_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
@@ -391,13 +378,12 @@ INSERT INTO "mw_role" VALUES (3, '普通用户', 1, 0, 1599820462, 1599820462);
 -- ----------------------------
 -- Table structure for mw_role_privilege
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_role_privilege";
+DROP TABLE IF EXISTS "mw_role_privilege";
 CREATE TABLE "mw_role_privilege" (
-  "role_privilege_id" integer(8) NOT NULL,
+  "role_privilege_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "role_id" integer(8),
   "privilege_id" integer(8),
-  "create_time" integer(8),
-  PRIMARY KEY ("role_privilege_id")
+  "create_time" integer(8)
 );
 
 -- ----------------------------
@@ -437,19 +423,18 @@ INSERT INTO "mw_role_privilege" VALUES (30, 2, 48, 1599820465);
 -- ----------------------------
 -- Table structure for mw_space
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_space";
+DROP TABLE IF EXISTS "mw_space";
 CREATE TABLE "mw_space" (
-  "space_id" integer(8) NOT NULL,
+  "space_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT(255),
   "description" TEXT(255),
   "tags" TEXT(255),
   "visit_level" TEXT(255),
   "is_share" integer(2),
   "is_export" integer(2),
-  "is_delete" integer(2),
+  "is_delete" integer(2) DEFAULT 0,
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("space_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
@@ -460,15 +445,14 @@ INSERT INTO "mw_space" VALUES (1, '内地', NULL, NULL, 'public', 1, 0, 0, 15998
 -- ----------------------------
 -- Table structure for mw_space_user
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_space_user";
+DROP TABLE IF EXISTS "mw_space_user";
 CREATE TABLE "mw_space_user" (
-  "space_user_id" integer(8) NOT NULL,
+  "space_user_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "user_id" integer(8),
   "space_id" integer(8),
   "privilege" integer(2),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("space_user_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
@@ -479,9 +463,9 @@ INSERT INTO "mw_space_user" VALUES (1, 1, 1, 2, 1599820732, 1599820732);
 -- ----------------------------
 -- Table structure for mw_user
 -- ----------------------------
- DROP TABLE IF EXISTS "mw_user";
+DROP TABLE IF EXISTS "mw_user";
 CREATE TABLE "mw_user" (
-  "user_id" integer(8) NOT NULL,
+  "user_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "username" TEXT(255),
   "password" TEXT(255),
   "given_name" TEXT(255),
@@ -498,13 +482,122 @@ CREATE TABLE "mw_user" (
   "is_forbidden" integer(2),
   "is_delete" integer(2),
   "create_time" integer(8),
-  "update_time" integer(8),
-  PRIMARY KEY ("user_id")
+  "update_time" integer(8)
 );
 
 -- ----------------------------
 -- Records of mw_user
 -- ----------------------------
-INSERT INTO "mw_user" VALUES (1, 'adminwiki', 'e10adc3949ba59abbe56e057f20f883e', 'adminwiki', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', 1600050238, 1, 0, 0, 1599820462, 1600050238);
+INSERT INTO "mw_user" VALUES (1, 'adminwiki', 'e10adc3949ba59abbe56e057f20f883e', 'adminwiki', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', 1600763917, 1, 0, 0, 1599820462, 1600763917);
+
+-- ----------------------------
+-- Table structure for sqlite_sequence
+-- ----------------------------
+DROP TABLE IF EXISTS "sqlite_sequence";
+CREATE TABLE "sqlite_sequence" (
+  "name",
+  "seq"
+);
+
+-- ----------------------------
+-- Records of sqlite_sequence
+-- ----------------------------
+INSERT INTO "sqlite_sequence" VALUES ('mw_space', 1);
+INSERT INTO "sqlite_sequence" VALUES ('mw_space_user', 1);
+INSERT INTO "sqlite_sequence" VALUES ('mw_user', 1);
+INSERT INTO "sqlite_sequence" VALUES ('mw_attachment', 1);
+INSERT INTO "sqlite_sequence" VALUES ('mw_collection', 0);
+INSERT INTO "sqlite_sequence" VALUES ('mw_config', 9);
+INSERT INTO "sqlite_sequence" VALUES ('mw_contact', 0);
+INSERT INTO "sqlite_sequence" VALUES ('mw_document', 3);
+INSERT INTO "sqlite_sequence" VALUES ('mw_email', 0);
+INSERT INTO "sqlite_sequence" VALUES ('mw_follow', 2);
+INSERT INTO "sqlite_sequence" VALUES ('mw_link', 0);
+INSERT INTO "sqlite_sequence" VALUES ('mw_log', 11);
+INSERT INTO "sqlite_sequence" VALUES ('mw_log_document', 7);
+INSERT INTO "sqlite_sequence" VALUES ('mw_login_auth', 0);
+INSERT INTO "sqlite_sequence" VALUES ('mw_privilege', 93);
+INSERT INTO "sqlite_sequence" VALUES ('mw_role', 3);
+INSERT INTO "sqlite_sequence" VALUES ('mw_role_privilege', 30);
+
+-- ----------------------------
+-- Auto increment value for mw_attachment
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 1 WHERE name = 'mw_attachment';
+
+-- ----------------------------
+-- Auto increment value for mw_collection
+-- ----------------------------
+
+-- ----------------------------
+-- Auto increment value for mw_config
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 9 WHERE name = 'mw_config';
+
+-- ----------------------------
+-- Auto increment value for mw_contact
+-- ----------------------------
+
+-- ----------------------------
+-- Auto increment value for mw_document
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 3 WHERE name = 'mw_document';
+
+-- ----------------------------
+-- Auto increment value for mw_email
+-- ----------------------------
+
+-- ----------------------------
+-- Auto increment value for mw_follow
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 2 WHERE name = 'mw_follow';
+
+-- ----------------------------
+-- Auto increment value for mw_link
+-- ----------------------------
+
+-- ----------------------------
+-- Auto increment value for mw_log
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 11 WHERE name = 'mw_log';
+
+-- ----------------------------
+-- Auto increment value for mw_log_document
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 7 WHERE name = 'mw_log_document';
+
+-- ----------------------------
+-- Auto increment value for mw_login_auth
+-- ----------------------------
+
+-- ----------------------------
+-- Auto increment value for mw_privilege
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 93 WHERE name = 'mw_privilege';
+
+-- ----------------------------
+-- Auto increment value for mw_role
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 3 WHERE name = 'mw_role';
+
+-- ----------------------------
+-- Auto increment value for mw_role_privilege
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 30 WHERE name = 'mw_role_privilege';
+
+-- ----------------------------
+-- Auto increment value for mw_space
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 1 WHERE name = 'mw_space';
+
+-- ----------------------------
+-- Auto increment value for mw_space_user
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 1 WHERE name = 'mw_space_user';
+
+-- ----------------------------
+-- Auto increment value for mw_user
+-- ----------------------------
+UPDATE "sqlite_sequence" SET seq = 1 WHERE name = 'mw_user';
 
 PRAGMA foreign_keys = true;
