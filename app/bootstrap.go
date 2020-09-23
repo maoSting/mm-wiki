@@ -45,6 +45,8 @@ var (
 	AttachmentAbsDir = ""
 
 	SearchIndexAbsDir = ""
+
+	VisitLevel = [4]string{"private", "internal", "public", "release"}
 )
 
 func init() {
@@ -160,9 +162,6 @@ func initDB() {
 	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 	filename := beego.AppConfig.String("db::host")
 	host := filepath.Join(dir, filename)
-	fmt.Println("initDb")
-	fmt.Println(host)
-
 	openMode := beego.AppConfig.String("db::open_mode")
 	cacheMode := beego.AppConfig.String("db::cache_mode")
 	syncMode, _ := beego.AppConfig.Int("db::sync_mode")

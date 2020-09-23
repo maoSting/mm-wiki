@@ -44,6 +44,11 @@
                     <td>{{$space.description}}</td>
                     <td class="tags-show">{{$space.tags}}</td>
                     <td class="center">
+                    {{range $.visit_level}}
+                        {{if eq $space.visit_level .}}
+                            <label class="text text-primary">{{.}}</label>
+                        {{end}}
+                    {{end}}
                     {{if eq $space.visit_level "private"}}
                         <label class="text text-danger">Private</label>
                     {{else if eq $space.visit_level "internal"}}

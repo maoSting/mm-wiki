@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/phachon/mm-wiki/app"
 	"strings"
 	"time"
 
@@ -75,6 +76,7 @@ func (this *SpaceController) List() {
 	this.Data["spaces"] = spaces
 	this.Data["keyword"] = keyword
 	this.Data["count"] = count
+	this.Data["visit_level"] = app.VisitLevel
 	this.SetPaginator(number, count)
 	this.viewLayout("space/list", "default")
 }
