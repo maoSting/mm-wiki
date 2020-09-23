@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/phachon/mm-wiki/app/services"
+	"log"
 	"regexp"
 	"strings"
 
@@ -30,6 +31,13 @@ func (this *DocumentController) Index() {
 	if len(document) == 0 {
 		this.ViewError("文档不存在！")
 	}
+
+	// 调试
+	log.Fatal(document)
+	_, pageFile, err := models.DocumentModel.GetParentDocumentsByDocument(document)
+	log.Fatal(err)
+	log.Fatal(pageFile)
+
 	spaceId := document["space_id"]
 	space, err := models.SpaceModel.GetSpaceBySpaceId(spaceId)
 	if err != nil {

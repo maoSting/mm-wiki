@@ -632,7 +632,7 @@ func (d *Document) GetDocumentsByDocumentIds(documentIds []string) (documents []
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"document_id": documentIds,
 		"is_delete":   Document_Delete_False,
-	}))
+	}).OrderBy("document_id", "ASC"))
 	if err != nil {
 		return
 	}
