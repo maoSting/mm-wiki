@@ -113,6 +113,10 @@ func initConfig() {
 	beego.BConfig.AppName = beego.AppConfig.String("sys.name")
 	beego.BConfig.ServerName = beego.AppConfig.String("sys.name")
 
+	// todo
+	beego.BConfig.EnableErrorsRender = true
+	beego.BConfig.EnableErrorsShow = true
+
 	// set static path
 	beego.SetStaticPath("/static/", filepath.Join(RootDir, "./static"))
 	// views path
@@ -166,11 +170,17 @@ func initDB() {
 	cacheMode := beego.AppConfig.String("db::cache_mode")
 	syncMode, _ := beego.AppConfig.Int("db::sync_mode")
 	dbTablePrefix := beego.AppConfig.String("db::table_prefix")
+	maxIdle, _ := beego.AppConfig.Int("db::conn_max_idle")
+	maxConn, _ := beego.AppConfig.Int("db::conn_max_connection")
+
 	models.G = sqlite3.NewDBGroup("default")
 
 	cfg := sqlite3.NewDBConfigWith(host, openMode, cacheMode, syncMode)
 	cfg.TablePrefix = dbTablePrefix
 	cfg.TablePrefixSqlIdentifier = "__PREFIX__"
+	cfg.MaxIdleConns = maxIdle
+	cfg.MaxOpenConns = maxConn
+
 	err := models.G.Regist("default", cfg)
 	if err != nil {
 		logs.Error(fmt.Errorf("database error:%s,with config : %v", err, cfg))

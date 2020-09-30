@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"github.com/phachon/mm-wiki/app/services"
-	"log"
 	"regexp"
 	"strings"
 
@@ -17,7 +16,6 @@ type DocumentController struct {
 
 // document index
 func (this *DocumentController) Index() {
-
 	documentId := this.GetString("document_id", "")
 	if documentId == "" {
 		this.ViewError("页面参数错误！", "/space/index")
@@ -31,12 +29,6 @@ func (this *DocumentController) Index() {
 	if len(document) == 0 {
 		this.ViewError("文档不存在！")
 	}
-
-	// 调试
-	log.Fatal(document)
-	_, pageFile, err := models.DocumentModel.GetParentDocumentsByDocument(document)
-	log.Fatal(err)
-	log.Fatal(pageFile)
 
 	spaceId := document["space_id"]
 	space, err := models.SpaceModel.GetSpaceBySpaceId(spaceId)
@@ -137,7 +129,7 @@ func (this *DocumentController) Add() {
 
 // save document
 func (this *DocumentController) Save() {
-
+	fmt.Println("Save")
 	if !this.IsPost() {
 		this.ViewError("请求方式有误！", "/main/index")
 	}

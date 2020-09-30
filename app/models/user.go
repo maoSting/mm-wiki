@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"github.com/phachon/mm-wiki/app/utils"
 	"github.com/snail007/go-activerecord/sqlite3"
 	"strings"
@@ -82,24 +81,12 @@ func (u *User) HasUsername(username string) (has bool, err error) {
 // get user by username
 func (u *User) GetUserByUsername(username string) (user map[string]string, err error) {
 	db := G.DB()
-	fmt.Println("db")
-	fmt.Println(db)
-	var rs *sqlite3.ResultSet
-	rs, err = db.Query(db.AR().From(Table_Config_Name).Limit(0, 1))
-	fmt.Println(err)
-	if err != nil {
-		return
-	}
-	fmt.Println(rs)
-
 	//var rs *mysql.ResultSet
-	//var rs *sqlite3.ResultSet
+	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_User_Name).Where(map[string]interface{}{
 		"username":  username,
 		"is_delete": User_Delete_False,
 	}).Limit(0, 1))
-	fmt.Println(rs)
-	fmt.Println(err)
 
 	if err != nil {
 		return
