@@ -178,33 +178,40 @@ func (d *Document) GetDocumentMaxSequence(parentId string, spaceId string) (sequ
 func (d *Document) DeleteDBAndFile(documentId string, spaceId string, userId string, pageFile string, docType string) (err error) {
 	db := G.DB()
 	//tx, err := db.Begin(db.Config)
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
-	_, err = db.ExecTx(db.AR().Update(Table_Document_Name, map[string]interface{}{
+	//tx, err := db.Begin()
+	//if err != nil {
+	//	return
+	//}
+	//_, err = db.ExecTx(db.AR().Update(Table_Document_Name, map[string]interface{}{
+	//	"is_delete":    Document_Delete_True,
+	//	"update_time":  time.Now().Unix(),
+	//	"edit_user_id": userId,
+	//}, map[string]interface{}{
+	//	"document_id": documentId,
+	//}), tx)
+	_, err = db.Exec(db.AR().Update(Table_Document_Name, map[string]interface{}{
 		"is_delete":    Document_Delete_True,
 		"update_time":  time.Now().Unix(),
 		"edit_user_id": userId,
 	}, map[string]interface{}{
 		"document_id": documentId,
-	}), tx)
+	}))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 
 	// delete document file
 	err = utils.Document.Delete(pageFile, utils.Convert.StringToInt(docType))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 
-	err = tx.Commit()
-	if err != nil {
-		return
-	}
+	//err = tx.Commit()
+	//if err != nil {
+	//	return
+	//}
 
 	// create document log
 	go func(userId, documentId string, spaceId string) {
@@ -239,10 +246,10 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 	db := G.DB()
 	// start db begin
 	//tx, err := db.Begin(db.Config)
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
+	//tx, err := db.Begin()
+	//if err != nil {
+	//	return
+	//}
 
 	// 处理同级排序编号
 	parentId := documentValue["parent_id"].(string)
@@ -266,9 +273,10 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 	var rs *sqlite3.ResultSet
 	documentValue["create_time"] = time.Now().Unix()
 	documentValue["update_time"] = time.Now().Unix()
-	rs, err = db.ExecTx(db.AR().Insert(Table_Document_Name, documentValue), tx)
+	//rs, err = db.ExecTx(db.AR().Insert(Table_Document_Name, documentValue), tx)
+	rs, err = db.Exec(db.AR().Insert(Table_Document_Name, documentValue))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 	id = rs.LastInsertId
@@ -290,18 +298,14 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 	fmt.Println("pageFile")
 	fmt.Println(pageFile)
 
-	tx.Rollback()
-	err = utils.Document.Create(pageFile)
-	// todo
-	tx.Rollback()
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
-	err = tx.Commit()
-	if err != nil {
-		return
-	}
+	//err = tx.Commit()
+	//if err != nil {
+	//	return
+	//}
 
 	userId := documentValue["create_user_id"].(string)
 	// create document log
@@ -385,32 +389,38 @@ func (d *Document) MoveDBAndFile(documentId string, spaceId string, updateValue 
 
 	db := G.DB()
 	// tx, err := db.Begin(db.Config)
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
+	//tx, err := db.Begin()
+	//if err != nil {
+	//	return
+	//}
 	//var rs *mysql.ResultSet
 	var rs *sqlite3.ResultSet
 	updateValue["update_time"] = time.Now().Unix()
-	rs, err = db.ExecTx(db.AR().Update(Table_Document_Name, updateValue, map[string]interface{}{
+	//rs, err = db.ExecTx(db.AR().Update(Table_Document_Name, updateValue, map[string]interface{}{
+	//	"document_id": documentId,
+	//	"is_delete":   Document_Delete_False,
+	//}), tx)
+
+	rs, err = db.Exec(db.AR().Update(Table_Document_Name, updateValue, map[string]interface{}{
 		"document_id": documentId,
 		"is_delete":   Document_Delete_False,
-	}), tx)
+	}))
+
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 	id = rs.LastInsertId
 
 	err = utils.Document.Move(oldPageFile, newPageFile, utils.Convert.StringToInt(docType))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
-	err = tx.Commit()
-	if err != nil {
-		return
-	}
+	//err = tx.Commit()
+	//if err != nil {
+	//	return
+	//}
 
 	// create document log
 	go func(userId, documentId, comment string, spaceId string) {
@@ -434,19 +444,25 @@ func (d *Document) UpdateDBAndFile(documentId string, spaceId string, document m
 	// begin update
 	db := G.DB()
 	// tx, err := db.Begin(db.Config)
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
+	//tx, err := db.Begin()
+	//if err != nil {
+	//	return
+	//}
 	//var rs *mysql.ResultSet
 	var rs *sqlite3.ResultSet
 	updateValue["update_time"] = time.Now().Unix()
-	rs, err = db.ExecTx(db.AR().Update(Table_Document_Name, updateValue, map[string]interface{}{
+	//rs, err = db.ExecTx(db.AR().Update(Table_Document_Name, updateValue, map[string]interface{}{
+	//	"document_id": documentId,
+	//	"is_delete":   Document_Delete_False,
+	//}), tx)
+
+	rs, err = db.Exec(db.AR().Update(Table_Document_Name, updateValue, map[string]interface{}{
 		"document_id": documentId,
 		"is_delete":   Document_Delete_False,
-	}), tx)
+	}))
+
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 	id = rs.LastInsertId
@@ -459,15 +475,15 @@ func (d *Document) UpdateDBAndFile(documentId string, spaceId string, document m
 	}
 	err = utils.Document.Update(oldPageFile, updateValue["name"].(string), documentContent, docType, nameIsChange)
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 
 	// commit
-	err = tx.Commit()
-	if err != nil {
-		return
-	}
+	//err = tx.Commit()
+	//if err != nil {
+	//	return
+	//}
 
 	// create document log
 	go func(documentId string, comment string, spaceId string) {

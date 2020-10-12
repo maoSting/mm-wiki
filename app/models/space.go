@@ -161,10 +161,10 @@ func (s *Space) UpdateDBAndSpaceFileName(spaceId string, spaceValue map[string]i
 	// begin update
 	db := G.DB()
 	// tx, err := db.Begin(db.Config)
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
+	//tx, err := db.Begin()
+	//if err != nil {
+	//	return
+	//}
 	//var rs *mysql.ResultSet
 	var rs *sqlite3.ResultSet
 
@@ -179,12 +179,16 @@ func (s *Space) UpdateDBAndSpaceFileName(spaceId string, spaceValue map[string]i
 
 	// update space db
 	spaceValue["update_time"] = time.Now().Unix()
-	rs, err = db.ExecTx(db.AR().Update(Table_Space_Name, spaceValue, map[string]interface{}{
+	//rs, err = db.ExecTx(db.AR().Update(Table_Space_Name, spaceValue, map[string]interface{}{
+	//	"space_id":  spaceId,
+	//	"is_delete": Space_Delete_False,
+	//}), tx)
+	rs, err = db.Exec(db.AR().Update(Table_Space_Name, spaceValue, map[string]interface{}{
 		"space_id":  spaceId,
 		"is_delete": Space_Delete_False,
-	}), tx)
+	}))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 	id = rs.LastInsertId
@@ -194,22 +198,27 @@ func (s *Space) UpdateDBAndSpaceFileName(spaceId string, spaceValue map[string]i
 		"update_time": time.Now().Unix(),
 	}
 	// update space document name
-	_, err = db.ExecTx(db.AR().Update(Table_Document_Name, documentValue, map[string]interface{}{
+	//_, err = db.ExecTx(db.AR().Update(Table_Document_Name, documentValue, map[string]interface{}{
+	//	"space_id":  spaceId,
+	//	"parent_id": 0,
+	//	"type":      Document_Type_Dir,
+	//}), tx)
+	_, err = db.Exec(db.AR().Update(Table_Document_Name, documentValue, map[string]interface{}{
 		"space_id":  spaceId,
 		"parent_id": 0,
 		"type":      Document_Type_Dir,
-	}), tx)
+	}))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 	// update space name
 	err = utils.Document.UpdateSpaceName(oldName, spaceValue["name"].(string))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
-	err = tx.Commit()
+	//err = tx.Commit()
 
 	return
 }

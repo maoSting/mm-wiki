@@ -116,15 +116,16 @@ func (r *Role) Insert(roleValue map[string]interface{}) (id int64, err error) {
 	roleValue["update_time"] = time.Now().Unix()
 	db := G.DB()
 	// tx, err := db.Begin(db.Config)
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
+	//tx, err := db.Begin()
+	//if err != nil {
+	//	return
+	//}
 	//var rs *mysql.ResultSet
 	var rs *sqlite3.ResultSet
-	rs, err = db.ExecTx(db.AR().Insert(Table_Role_Name, roleValue), tx)
+	//rs, err = db.ExecTx(db.AR().Insert(Table_Role_Name, roleValue), tx)
+	rs, err = db.Exec(db.AR().Insert(Table_Role_Name, roleValue))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
 	id = rs.LastInsertId
@@ -139,15 +140,16 @@ func (r *Role) Insert(roleValue map[string]interface{}) (id int64, err error) {
 		}
 		rolePrivileges = append(rolePrivileges, rolePrivilege)
 	}
-	_, err = db.ExecTx(db.AR().InsertBatch(Table_RolePrivilege_Name, rolePrivileges), tx)
+	//_, err = db.ExecTx(db.AR().InsertBatch(Table_RolePrivilege_Name, rolePrivileges), tx)
+	_, err = db.Exec(db.AR().InsertBatch(Table_RolePrivilege_Name, rolePrivileges))
 	if err != nil {
-		tx.Rollback()
+		//tx.Rollback()
 		return
 	}
-	err = tx.Commit()
-	if err != nil {
-		return
-	}
+	//err = tx.Commit()
+	//if err != nil {
+	//	return
+	//}
 	return
 }
 
