@@ -2,18 +2,16 @@ package main
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	"github.com/phachon/mm-wiki/app"
 	"github.com/phachon/mm-wiki/app/controllers"
 	systemControllers "github.com/phachon/mm-wiki/app/modules/system/controllers"
 	"github.com/phachon/mm-wiki/app/utils"
 	"html/template"
+	"mm-wiki/app/front"
 	"net/http"
 )
 
 func init() {
-	log := logs.NewLogger()
-	log.Debug("wow initRouter thing going on")
 	initRouter()
 }
 
@@ -22,7 +20,8 @@ func initRouter() {
 	beego.BConfig.WebConfig.AutoRender = false
 	beego.BConfig.RouterCaseSensitive = false
 
-	beego.Router("/", &controllers.MainController{}, "*:Index")
+	beego.Router("/", &front.FrontController{}, "*:Index")
+	//beego.Router("/", &controllers.MainController{}, "*:Index")
 	beego.Router("/author", &controllers.AuthorController{}, "*:Index")
 	beego.AutoRouter(&controllers.AuthorController{})
 	beego.AutoRouter(&controllers.MainController{})

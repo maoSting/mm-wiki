@@ -811,3 +811,18 @@ func (d *Document) GetDocumentContentByDocument(doc map[string]string) (content 
 	}
 	return content, pageFile, nil
 }
+
+// DQ 后加
+func (d *Document) GetDocumentsBySpaceIdsDocumentLimit(spaceIds []string, limit int, number int) (documents []map[string]string, err error) {
+	db := G.DB()
+	var rs *sqlite3.ResultSet
+	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
+		"space_id":  spaceIds,
+		"is_delete": Document_Delete_False,
+	}).Limit(limit, number))
+	if err != nil {
+		return
+	}
+	documents = rs.Rows()
+	return
+}

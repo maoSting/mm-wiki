@@ -24,6 +24,7 @@ const (
 
 	Space_VisitLevel_Public  = "public"
 	Space_VisitLevel_Private = "private"
+	Space_VisitLevel_Release = "release"
 )
 
 const Table_Space_Name = "space"
