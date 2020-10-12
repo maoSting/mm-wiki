@@ -252,7 +252,6 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 	sequence += 1
 	documentValue["sequence"] = strconv.Itoa(sequence)
 
-	// 推测是 sqlite锁机制
 	//var rs *mysql.ResultSet
 	var rs *sqlite3.ResultSet
 	documentValue["create_time"] = time.Now().Unix()
@@ -265,10 +264,21 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 	}
 	id = rs.LastInsertId
 
+	// create document page file
+	document := map[string]string{
+		"space_id":  documentValue["space_id"].(string),
+		"parent_id": documentValue["parent_id"].(string),
+		"name":      documentValue["name"].(string),
+		"type":      fmt.Sprintf("%d", documentValue["type"].(int)),
+		"path":      documentValue["path"].(string),
+	}
+	_, pageFile, err := d.GetParentDocumentsByDocument(document)
+	err = utils.Document.Create(pageFile)
 	if err != nil {
 		//tx.Rollback()
 		return
 	}
+
 	//err = tx.Commit()
 	//if err != nil {
 	//	return
@@ -680,9 +690,11 @@ func (d *Document) GetAllDocuments() (documents []map[string]string, err error) 
 }
 
 func (d *Document) GetParentDocumentsByDocument(document map[string]string) (parentDocuments []map[string]string, pageFile string, err error) {
+	copy := []map[string]string{}
 	if document["parent_id"] == "0" {
 		parentDocuments = append(parentDocuments, document)
 		pageFile = utils.Document.GetDefaultPageFileBySpaceName(document["name"])
+		copy = parentDocuments
 	} else {
 		documentsIds := strings.Split(document["path"], ",")
 		parentDocuments, err := d.GetDocumentsByDocumentIds(documentsIds)
@@ -695,8 +707,9 @@ func (d *Document) GetParentDocumentsByDocument(document map[string]string) (par
 		}
 		parentPath = strings.TrimRight(parentPath, "/")
 		pageFile = utils.Document.GetPageFileByParentPath(document["name"], utils.Convert.StringToInt(document["type"]), parentPath)
+		copy = parentDocuments
 	}
-	return
+	return copy, pageFile, nil
 }
 
 func (d *Document) GetParentDocumentsByPath(path string) (parentDocuments []map[string]string, err error) {

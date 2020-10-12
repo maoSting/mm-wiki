@@ -58,6 +58,7 @@ func (this *PageController) View() {
 		this.ErrorLog("查找父文档失败：" + err.Error())
 		this.ViewError("查找父文档失败！")
 	}
+
 	if len(parentDocuments) == 0 {
 		this.ViewError("父文档不存在！")
 	}
