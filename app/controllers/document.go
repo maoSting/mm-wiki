@@ -129,7 +129,6 @@ func (this *DocumentController) Add() {
 
 // save document
 func (this *DocumentController) Save() {
-	fmt.Println("Save")
 	if !this.IsPost() {
 		this.ViewError("请求方式有误！", "/main/index")
 	}

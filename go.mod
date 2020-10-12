@@ -17,7 +17,6 @@ require (
 	github.com/go-ldap/ldap/v3 v3.1.11
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 	github.com/go-sql-driver/mysql v1.4.1
-	github.com/mattn/go-colorable v0.1.7 // indirect
 	github.com/phachon/mm-wiki v0.2.1
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
 	github.com/shirou/gopsutil v2.20.5+incompatible

@@ -46,20 +46,10 @@ func (d *Document) GetDocumentsByParentId(parentId string) (documents []map[stri
 	db := G.DB()
 	//var rs *mysql.ResultSet
 	var rs *sqlite3.ResultSet
-	fmt.Println("GetDocumentsByParentId")
-	pool := db.AR()
-	rs, err = db.Query(pool.From(Table_Document_Name).Where(map[string]interface{}{
+	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"parent_id": parentId,
 		"is_delete": Document_Delete_False,
 	}))
-	fmt.Println(pool.SQL())
-	fmt.Println("")
-	fmt.Printf("%+v", map[string]interface{}{
-		"parent_id": parentId,
-		"is_delete": Document_Delete_False,
-	})
-	fmt.Println("")
-
 	if err != nil {
 		return
 	}
@@ -259,12 +249,6 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 	if err != nil {
 		sequence = 0
 	}
-
-	parentDocuments, _ := d.GetDocumentsByDocumentIds([]string{"0", "1", "6"})
-	fmt.Println("Insert")
-	fmt.Println([]string{"0", "1", "6"})
-	fmt.Println(parentDocuments)
-
 	sequence += 1
 	documentValue["sequence"] = strconv.Itoa(sequence)
 
@@ -280,23 +264,6 @@ func (d *Document) Insert(documentValue map[string]interface{}) (id int64, err e
 		return
 	}
 	id = rs.LastInsertId
-
-	parentDocumentdds, _ := d.GetDocumentsByDocumentIds([]string{"0", "1", "6", "7"})
-	fmt.Println("Insert")
-	fmt.Println([]string{"0", "1", "6", "7"})
-	fmt.Println(parentDocumentdds)
-
-	// create document page file
-	document := map[string]string{
-		"space_id":  documentValue["space_id"].(string),
-		"parent_id": documentValue["parent_id"].(string),
-		"name":      documentValue["name"].(string),
-		"type":      fmt.Sprintf("%d", documentValue["type"]),
-		"path":      documentValue["path"].(string),
-	}
-	_, pageFile, err := d.GetParentDocumentsByDocument(document)
-	fmt.Println("pageFile")
-	fmt.Println(pageFile)
 
 	if err != nil {
 		//tx.Rollback()
@@ -680,9 +647,6 @@ func (d *Document) GetDocumentsByDocumentIds(documentIds []string) (documents []
 	if err != nil {
 		return
 	}
-	fmt.Println("GetDocumentsByDocumentIds")
-	fmt.Println(where)
-	fmt.Println(rs.Rows())
 	documents = rs.Rows()
 	return
 }
@@ -716,22 +680,12 @@ func (d *Document) GetAllDocuments() (documents []map[string]string, err error) 
 }
 
 func (d *Document) GetParentDocumentsByDocument(document map[string]string) (parentDocuments []map[string]string, pageFile string, err error) {
-	fmt.Println("GetParentDocumentsByDocument")
-
-	parentDocumentMore, _ := d.GetDocumentsByDocumentIds([]string{"0", "1", "6", "13"})
-	fmt.Println("Insert more")
-	fmt.Println(parentDocuments)
-	fmt.Println([]string{"0", "1", "6", "13"})
-	fmt.Println(parentDocumentMore)
-
 	if document["parent_id"] == "0" {
 		parentDocuments = append(parentDocuments, document)
 		pageFile = utils.Document.GetDefaultPageFileBySpaceName(document["name"])
 	} else {
 		documentsIds := strings.Split(document["path"], ",")
 		parentDocuments, err := d.GetDocumentsByDocumentIds(documentsIds)
-		fmt.Println(documentsIds)
-		fmt.Println(parentDocuments)
 		if err != nil {
 			return parentDocuments, "", err
 		}

@@ -43,9 +43,6 @@ func (this *AuthorController) Login() {
 	if password == "" {
 		this.jsonError("密码不能为空！")
 	}
-	//docs, err := models.DocumentModel.GetDocumentsByDocumentIds([]string{"0", "1", "6", "12"})
-	//fmt.Println(docs)
-	//this.jsonError("登录出错")
 
 	user, err := models.UserModel.GetUserByUsername(username)
 	if err != nil {
