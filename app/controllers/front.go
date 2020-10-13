@@ -2,8 +2,11 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/go-ego/riot/types"
 	"github.com/phachon/mm-wiki/app/models"
 	"mm-wiki/app/utils"
+	"mm-wiki/global"
+	"strings"
 )
 
 type FrontController struct {
@@ -128,4 +131,87 @@ func (this *FrontController) Detail() {
 	this.Data["page_content"] = documentContent
 	this.Data["parent_documents"] = parentDocuments
 	this.viewLayout("front/detail", "document_page")
+}
+
+func (this *FrontController) Search() {
+
+	keyword := strings.TrimSpace(this.GetString("keyword", ""))
+	searchType := this.GetString("search_type", "content")
+
+	this.Data["search_type"] = searchType
+	this.Data["keyword"] = keyword
+	this.Data["count"] = 0
+	if keyword == "" {
+		this.viewLayout("main/search", "default")
+		return
+	}
+	var documents = []map[string]string{}
+	var err error
+	// 获取该用户有权限的空间
+	publicSpaces, err := models.SpaceModel.GetSpacesByVisitLevel(models.Space_VisitLevel_Release)
+	if err != nil {
+		this.ErrorLog("搜索文档列表获取用户空间权限出错：" + err.Error())
+		this.ViewError("搜索文档错误！")
+	}
+	spaceUsers, err := models.SpaceUserModel.GetSpaceUsersByUserId(this.UserId)
+	if err != nil {
+		this.ErrorLog("搜索文档列表获取用户空间权限出错：" + err.Error())
+		this.ViewError("搜索文档错误！")
+	}
+	spaceIdsMap := make(map[string]bool)
+	for _, publicSpace := range publicSpaces {
+		spaceIdsMap[publicSpace["space_id"]] = true
+	}
+	for _, spaceUser := range spaceUsers {
+		if _, ok := spaceIdsMap[spaceUser["space_id"]]; !ok {
+			spaceIdsMap[spaceUser["space_id"]] = true
+		}
+	}
+	searchDocContents := make(map[string]string)
+	// 默认根据内容搜索
+	if searchType == "title" {
+		documents, err = models.DocumentModel.GetDocumentsByLikeName(keyword)
+	} else {
+		searchRes := global.DocSearcher.SearchDoc(types.SearchReq{Text: keyword})
+		searchDocIds := []string{}
+		for _, searchDoc := range searchRes.Docs {
+			if len(searchDoc.TokenSnippetLocs) == 0 {
+				continue
+			}
+			docId := searchDoc.DocId
+			content := searchDoc.Content
+			locIndex := searchDoc.TokenSnippetLocs[0]
+			searchContent := utils.Misc.SubStrUnicodeBySubStrIndex(content, keyword, locIndex, 30, 30)
+			searchDocContents[docId] = searchContent
+			searchDocIds = append(searchDocIds, docId)
+		}
+		documents, err = models.DocumentModel.GetDocumentsByDocumentIds(searchDocIds)
+	}
+	if err != nil {
+		this.ErrorLog("搜索文档出错：" + err.Error())
+		this.ViewError("搜索文档错误！")
+	}
+	// 过滤一下没权限的空间
+	realDocuments := []map[string]string{}
+	for _, document := range documents {
+		spaceId, _ := document["space_id"]
+		documentId, _ := document["document_id"]
+		if _, ok := spaceIdsMap[spaceId]; !ok {
+			continue
+		}
+		if searchType != "title" {
+			searchContent, ok := searchDocContents[documentId]
+			if !ok || searchContent == "" {
+				continue
+			}
+			document["search_content"] = searchContent
+		}
+		realDocuments = append(realDocuments, document)
+	}
+
+	this.Data["search_type"] = searchType
+	this.Data["keyword"] = keyword
+	this.Data["documents"] = realDocuments
+	this.Data["count"] = len(realDocuments)
+	this.viewLayout("front/search", "document_page")
 }
