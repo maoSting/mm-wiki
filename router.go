@@ -7,7 +7,6 @@ import (
 	systemControllers "github.com/phachon/mm-wiki/app/modules/system/controllers"
 	"github.com/phachon/mm-wiki/app/utils"
 	"html/template"
-	"mm-wiki/app/front"
 	"net/http"
 )
 
@@ -20,7 +19,9 @@ func initRouter() {
 	beego.BConfig.WebConfig.AutoRender = false
 	beego.BConfig.RouterCaseSensitive = false
 
-	beego.Router("/", &front.FrontController{}, "*:Index")
+	beego.Router("/", &controllers.FrontController{}, "*:Index")
+	beego.Router("/detail", &controllers.FrontController{}, "*:Detail")
+
 	//beego.Router("/", &controllers.MainController{}, "*:Index")
 	beego.Router("/author", &controllers.AuthorController{}, "*:Index")
 	beego.AutoRouter(&controllers.AuthorController{})
