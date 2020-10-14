@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <form action="/main/search" method="get">
+                <form action="/search" method="get">
                     <div class="col-md-3">
                         <div class="input-group">
                             <span class="input-group-addon"> 搜索方式</span>
@@ -34,7 +34,7 @@
                     {{range $document := $documents}}
                         <li>
                             <div>
-                                <a href="/document/index?document_id={{$document.document_id}}" target="_parent" class="text text-info text-font-15">
+                                <a href="/detail?document_id={{$document.document_id}}" target="_parent" class="text text-info text-font-15">
                                 {{if eq $document.type "1"}}
                                     <i class="fa fa-file-word-o"></i>
                                 {{else}}

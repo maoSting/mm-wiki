@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/go-ego/riot/types"
 	"github.com/phachon/mm-wiki/app/models"
-	"mm-wiki/app/utils"
-	"mm-wiki/global"
+	"github.com/phachon/mm-wiki/app/utils"
+	"github.com/phachon/mm-wiki/global"
 	"strings"
 )
 
@@ -136,7 +136,7 @@ func (this *FrontController) Detail() {
 func (this *FrontController) Search() {
 
 	keyword := strings.TrimSpace(this.GetString("keyword", ""))
-	searchType := this.GetString("search_type", "content")
+	searchType := "content"
 
 	this.Data["search_type"] = searchType
 	this.Data["keyword"] = keyword
@@ -148,45 +148,33 @@ func (this *FrontController) Search() {
 	var documents = []map[string]string{}
 	var err error
 	// 获取该用户有权限的空间
-	publicSpaces, err := models.SpaceModel.GetSpacesByVisitLevel(models.Space_VisitLevel_Release)
-	if err != nil {
-		this.ErrorLog("搜索文档列表获取用户空间权限出错：" + err.Error())
-		this.ViewError("搜索文档错误！")
-	}
-	spaceUsers, err := models.SpaceUserModel.GetSpaceUsersByUserId(this.UserId)
+	ReleaseSpaces, err := models.SpaceModel.GetSpacesByVisitLevel(models.Space_VisitLevel_Release)
 	if err != nil {
 		this.ErrorLog("搜索文档列表获取用户空间权限出错：" + err.Error())
 		this.ViewError("搜索文档错误！")
 	}
 	spaceIdsMap := make(map[string]bool)
-	for _, publicSpace := range publicSpaces {
+	for _, publicSpace := range ReleaseSpaces {
 		spaceIdsMap[publicSpace["space_id"]] = true
 	}
-	for _, spaceUser := range spaceUsers {
-		if _, ok := spaceIdsMap[spaceUser["space_id"]]; !ok {
-			spaceIdsMap[spaceUser["space_id"]] = true
-		}
-	}
 	searchDocContents := make(map[string]string)
+
 	// 默认根据内容搜索
-	if searchType == "title" {
-		documents, err = models.DocumentModel.GetDocumentsByLikeName(keyword)
-	} else {
-		searchRes := global.DocSearcher.SearchDoc(types.SearchReq{Text: keyword})
-		searchDocIds := []string{}
-		for _, searchDoc := range searchRes.Docs {
-			if len(searchDoc.TokenSnippetLocs) == 0 {
-				continue
-			}
-			docId := searchDoc.DocId
-			content := searchDoc.Content
-			locIndex := searchDoc.TokenSnippetLocs[0]
-			searchContent := utils.Misc.SubStrUnicodeBySubStrIndex(content, keyword, locIndex, 30, 30)
-			searchDocContents[docId] = searchContent
-			searchDocIds = append(searchDocIds, docId)
+	searchRes := global.DocSearcher.SearchDoc(types.SearchReq{Text: keyword})
+	searchDocIds := []string{}
+	for _, searchDoc := range searchRes.Docs {
+		if len(searchDoc.TokenSnippetLocs) == 0 {
+			continue
 		}
-		documents, err = models.DocumentModel.GetDocumentsByDocumentIds(searchDocIds)
+		docId := searchDoc.DocId
+		content := searchDoc.Content
+		locIndex := searchDoc.TokenSnippetLocs[0]
+		searchContent := utils.Misc.SubStrUnicodeBySubStrIndex(content, keyword, locIndex, 30, 30)
+		searchDocContents[docId] = searchContent
+		searchDocIds = append(searchDocIds, docId)
 	}
+	documents, err = models.DocumentModel.GetDocumentsByDocumentIds(searchDocIds)
+
 	if err != nil {
 		this.ErrorLog("搜索文档出错：" + err.Error())
 		this.ViewError("搜索文档错误！")
