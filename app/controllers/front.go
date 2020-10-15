@@ -23,14 +23,13 @@ func (this *FrontController) Index() {
 
 	var spaces []map[string]string
 	spaces, err = models.SpaceModel.GetSpacesByVisitLevel(models.Space_VisitLevel_Release)
-	fmt.Sprintf("%+v", spaces)
 
 	if err != nil {
 
 	}
 	spaceIds := []string{}
 	for _, space := range spaces {
-		documentNum, _ := models.DocumentModel.CountDocumentsBySpaceId(space["space_id"])
+		documentNum, _ := models.DocumentModel.CountPageDocumentsBySpaceId(space["space_id"])
 		count = documentNum + count
 		spaceIds = append(spaceIds, space["space_id"])
 	}
@@ -40,7 +39,7 @@ func (this *FrontController) Index() {
 	this.Data["count"] = count
 	this.SetPaginator(number, count)
 
-	this.viewLayout("front/view", "document_page")
+	this.viewLayout("front/view", "layout_front")
 }
 
 func (this *FrontController) Detail() {

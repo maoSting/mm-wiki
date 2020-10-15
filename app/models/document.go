@@ -818,11 +818,33 @@ func (d *Document) GetDocumentsBySpaceIdsDocumentLimit(spaceIds []string, limit 
 	var rs *sqlite3.ResultSet
 	rs, err = db.Query(db.AR().From(Table_Document_Name).Where(map[string]interface{}{
 		"space_id":  spaceIds,
+		"type":      Document_Type_Page,
 		"is_delete": Document_Delete_False,
 	}).Limit(limit, number))
 	if err != nil {
 		return
 	}
 	documents = rs.Rows()
+	return
+}
+
+// get document count
+func (d *Document) CountPageDocumentsBySpaceId(spaceId string) (count int64, err error) {
+	db := G.DB()
+	//var rs *mysql.ResultSet
+	var rs *sqlite3.ResultSet
+	rs, err = db.Query(
+		db.AR().
+			Select("count(*) as total").
+			From(Table_Document_Name).
+			Where(map[string]interface{}{
+				"space_id":  spaceId,
+				"type":      Document_Type_Page,
+				"is_delete": Document_Delete_False,
+			}))
+	if err != nil {
+		return
+	}
+	count = utils.NewConvert().StringToInt64(rs.Value("total"))
 	return
 }

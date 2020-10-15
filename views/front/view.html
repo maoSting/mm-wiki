@@ -1,21 +1,32 @@
+<div class="layui-col-md12">
+    <div class="layui-card">
+        <div class="layui-card-header">
+            列表
+        </div>
+        <div class="layui-card-body">
+            {{if eq .count 0}}
+                <div class="alert alert-info alert-dismissible fade in" role="alert" style="margin-bottom: 0">
+                    <p><i class="glyphicon glyphicon-volume-up"></i> 暂时还没有数据！</p>
+                </div>
+            {{else}}
+                <br>
+                {{range $document := .documents}}
+                    <div class="layui-col-md2">
+                        <div class="layui-btn-container">
+                            <a class="layui-btn-normal" href="/detail?document_id={{$document.document_id}}" title="查看空间文档">{{$document.name}}</a>
+                        </div>
+                    </div>
+                {{end}}
+                <br>
+            {{end}}
+        </div>
+    </div>
+</div>
+
+
 <div class="container-fluid">
     <div class="panel-body">
-        {{if eq .count 0}}
-            <div class="alert alert-info alert-dismissible fade in" role="alert" style="margin-bottom: 0">
-                <p><i class="glyphicon glyphicon-volume-up"></i> 暂时还没有数据！</p>
-            </div>
-        {{else}}
-            <br>
-            <table class="table" style="margin-bottom: 0">
-                <tbody>
-                {{range $document := .documents}}
-                    <tr class="space-list">
-                        <td><a href="/detail?document_id={{$document.document_id}}" title="查看空间文档">{{$document.name}}</a></td>
-                    </tr>
-                {{end}}
-                </tbody>
-            </table>
-        {{end}}
+
     </div>
     <div class="panel-footer">
         {{template "paginator/default.html" .}}
