@@ -21,7 +21,12 @@
         {{range $document := $documents}}
             <div class="layui-col-md6">
                 <div class="layui-card">
-                    <div class="layui-card-header">{{$document.name}}</div>
+                    <div class="layui-card-header">
+                        {{$document.name}}
+                        <span class="layui-badge layui-bg-gray">
+                            {{dateFormat $document.update_time "Y-m-d H:i"}}
+                        </span>
+                    </div>
                     <div class="layui-card-body search-content">
                         {{$document.search_content}}
                     </div>
