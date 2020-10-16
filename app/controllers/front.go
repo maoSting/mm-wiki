@@ -129,7 +129,7 @@ func (this *FrontController) Detail() {
 	this.Data["collection_id"] = collectionId
 	this.Data["page_content"] = documentContent
 	this.Data["parent_documents"] = parentDocuments
-	this.viewLayout("front/detail", "document_page")
+	this.viewLayout("front/detail", "layout_front")
 }
 
 func (this *FrontController) Search() {
@@ -200,5 +200,5 @@ func (this *FrontController) Search() {
 	this.Data["keyword"] = keyword
 	this.Data["documents"] = realDocuments
 	this.Data["count"] = len(realDocuments)
-	this.viewLayout("front/search", "document_page")
+	this.viewLayout("front/search", "layout_front")
 }

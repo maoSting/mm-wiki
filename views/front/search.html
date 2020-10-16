@@ -1,27 +1,39 @@
-<div class="container-fluid">{{$documents := .documents}}
+{{$documents := .documents}}
+<div class="layui-row" style="margin: 35px;">
+    <form class="layui-form" action="/search">
+        <div class="layui-col-md-offset1">
+            <div class="layui-col-md8">
+                <div class="layui-input-block">
+                    <input type="text" name="keyword" value="{{.keyword}}" placeholder="" class="layui-input">
+                </div>
+            </div>
+            <button class="layui-btn">搜索</button>
+        </div>
+    </form>
+</div>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 25px;">
+    <legend>兼容性和面向场景</legend>
+</fieldset>
+<div class="layui-row">
+    {{if eq .count 0}}
+    {{else}}
+        {{range $document := $documents}}
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">{{$document.name}}</div>
+                    <div class="layui-card-body search-content">
+                        {{$document.search_content}}
+                    </div>
+                </div>
+            </div>
+        {{end}}
+    {{end}}
+
+</div>
+<div class="container-fluid">
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row">
-                <form action="/search" method="get">
-                    <div class="col-md-3">
-                        <div class="input-group">
-                            <span class="input-group-addon"> 搜索方式</span>
-                            <select class="form-control" name="search_type">
-                                <option value="title" {{if eq $.search_type "title"}} selected="selected" {{end}}>文档标题</option>
-                                <option value="content" {{if eq $.search_type "content"}} selected="selected" {{end}}>文档内容</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="input-group">
-                            <input class="form-control" name="keyword" type="text" value="{{.keyword}}" placeholder="请输入搜索关键字...">
-                            <span class="input-group-btn">
-				              <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i></button>
-				            </span>
-                        </div>
-                    </div>
-                </form>
-            </div>
             <hr>
             {{if eq .count 0}}
                 <div class="alert alert-info alert-dismissible fade in" role="alert" style="margin-bottom: 0">

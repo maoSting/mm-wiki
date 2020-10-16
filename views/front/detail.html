@@ -1,29 +1,33 @@
-<div class="container-fluid">
-    <div class="row">{{$pageContent := .page_content}}{{$document := .document}}{{$parentDocuments := .parent_documents}}
-
-        <div class="col-md-12">{{$createUser := .create_user}}{{$editUser := .edit_user}}{{$collectionId := .collection_id}}{{$space := .space}}
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-8">
-                        <h3 class="view-page-title">{{$document.name}}</h3>
-                    </div>
-                </div>
-                <hr style="margin: 0">
-            </div>
-            <div class="panel-body md-view-box" >
-                <div class="dir-preview-box">
-                    <div class="page-view-dir-toc" id="page-view-dir-toc">
-
-                    </div>
-                </div>
-                <div id="document_page_view" style="padding: 0 10px 10px 10px;">
-                    <textarea style="display:none;">{{$pageContent}}</textarea>
-                </div>
+{{$pageContent := .page_content}}
+{{$document := .document}}
+{{$parentDocuments := .parent_documents}}
+{{$createUser := .create_user}}
+{{$editUser := .edit_user}}
+{{$collectionId := .collection_id}}
+{{$space := .space}}
+<div class="layui-col-md12">
+    <div class="layui-card">
+        <div class="layui-card-header">
+            <h2>
+                {{$document.name}}
+            </h2>
+        </div>
+        <div class="layui-card-body">
+            <div id="document_page_view" style="padding: 0 10px 10px 10px;">
+                <textarea style="display:none;">{{$pageContent}}</textarea>
             </div>
         </div>
     </div>
 </div>
-<script src="/static/plugins/md-toc/md-toc.js"></script>
+<script type="text/javascript" src="/static/plugins/editor.md/editormd.min.js"></script>
+<script type="text/javascript" src="/static/plugins/editor.md/lib/marked.min.js"></script>
+<script type="text/javascript" src="/static/plugins/editor.md/lib/prettify.min.js"></script>
+<script type="text/javascript" src="/static/plugins/editor.md/lib/raphael.min.js"></script>
+<script type="text/javascript" src="/static/plugins/editor.md/lib/underscore.min.js"></script>
+<script type="text/javascript" src="/static/plugins/editor.md/lib/sequence-diagram.min.js"></script>
+<script type="text/javascript" src="/static/plugins/editor.md/lib/flowchart.min.js"></script>
+<script type="text/javascript" src="/static/plugins/editor.md/lib/jquery.flowchart.min.js"></script>
+
 <script type="text/javascript">
     $(function() {
         editormd.katexURL = {

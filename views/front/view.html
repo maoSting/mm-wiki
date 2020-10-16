@@ -1,34 +1,48 @@
-<div class="layui-col-md12">
-    <div class="layui-card">
-        <div class="layui-card-header">
-            列表
-        </div>
-        <div class="layui-card-body">
-            {{if eq .count 0}}
-                <div class="alert alert-info alert-dismissible fade in" role="alert" style="margin-bottom: 0">
-                    <p><i class="glyphicon glyphicon-volume-up"></i> 暂时还没有数据！</p>
+<div class="layui-row" style="margin: 35px;">
+    <form class="layui-form" action="/search">
+        <div class="layui-col-md-offset1">
+            <div class="layui-col-md8">
+                <div class="layui-input-block">
+                    <input type="text" name="keyword" value="" placeholder="" class="layui-input">
                 </div>
-            {{else}}
-                <br>
-                {{range $document := .documents}}
-                    <div class="layui-col-md2">
-                        <div class="layui-btn-container">
-                            <a class="layui-btn-normal" href="/detail?document_id={{$document.document_id}}" title="查看空间文档">{{$document.name}}</a>
-                        </div>
-                    </div>
-                {{end}}
-                <br>
-            {{end}}
+            </div>
+            <button class="layui-btn">搜索</button>
         </div>
-    </div>
+    </form>
 </div>
 
-
-<div class="container-fluid">
-    <div class="panel-body">
-
+<fieldset class="layui-elem-field" style="margin-top: 30px;">
+    <legend>按钮主题</legend>
+    <div class="layui-row">
+        {{if eq .count 0}}
+            <div class="alert alert-info alert-dismissible fade in" role="alert" style="margin-bottom: 0">
+                <p><i class="glyphicon glyphicon-volume-up"></i> 暂时还没有数据！</p>
+            </div>
+        {{else}}
+            {{range $document := .documents}}
+                <div class="layui-col-md3 layui-field-title" style="text-align: center;">
+                    <a class="" href="/detail?document_id={{$document.document_id}}"
+                       title="查看">{{$document.name}}</a>
+                </div>
+            {{end}}
+        {{end}}
     </div>
-    <div class="panel-footer">
-        {{template "paginator/default.html" .}}
+
+</fieldset>
+
+
+<div class="layui-row">
+    <div class="layui-btn-container">
+        {{if eq .count 0}}
+            <div class="alert alert-info alert-dismissible fade in" role="alert" style="margin-bottom: 0">
+                <p><i class="glyphicon glyphicon-volume-up"></i> 暂时还没有数据！</p>
+            </div>
+        {{else}}
+            {{range $document := .documents}}
+                <a class="layui-btn-normal" href="/detail?document_id={{$document.document_id}}"
+                   title="查看空间文档">{{$document.name}}</a>
+            {{end}}
+        {{end}}
     </div>
 </div>
+{{template "paginator/layui.html" .}}
