@@ -17,10 +17,11 @@ require (
 	github.com/go-ldap/ldap/v3 v3.1.11
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 	github.com/go-sql-driver/mysql v1.4.1
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/phachon/mm-wiki v0.2.1
+	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
 	github.com/shirou/gopsutil v2.20.5+incompatible
+	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/snail007/go-activerecord v0.0.0-20200729014052-c52486828493
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/russross/blackfriday.v2 v2.0.0

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"crypto/md5"
+	"crypto/sha1"
 	"encoding/base64"
 	"encoding/hex"
 )
@@ -48,6 +49,13 @@ func (encrypt *encrypt) Base64DecodeBytes(str string) ([]byte, error) {
 //md5加密
 func (encrypt *encrypt) Md5Encode(str string) string {
 	hash := md5.New()
+	hash.Write([]byte(str))
+	return hex.EncodeToString(hash.Sum(nil))
+}
+
+// sha1加密
+func (encrypt *encrypt) Sha1Encode(str string) string {
+	hash := sha1.New()
 	hash.Write([]byte(str))
 	return hex.EncodeToString(hash.Sum(nil))
 }

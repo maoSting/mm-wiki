@@ -18,6 +18,12 @@ type AuthorController struct {
 
 // login index
 func (this *AuthorController) Index() {
+	// code 暗号
+	code := strings.TrimSpace(this.GetString("code"))
+	hour := beego.Date(time.Now(), "Hi")
+	if code != hour {
+		this.Redirect("/", 302)
+	}
 
 	// is open auth login
 	ssoOpen := models.ConfigModel.GetConfigValueByKey(models.ConfigKeyAuthLogin, "0")
