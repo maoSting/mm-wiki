@@ -50,6 +50,7 @@ var (
 )
 
 func init() {
+	fmt.Println("init")
 	initFlag()
 	poster()
 	initConfig()
@@ -57,9 +58,10 @@ func init() {
 	checkUpgrade()
 	initDocumentDir()
 	initSearch()
-	//initWork()
+	initWork()
 	StartTime = time.Now().Unix()
 	beego.AddFuncMap("dateFormat", utils.Date.Format)
+	//toolbox.NewTask("testTask", "* * * * * *", tasks.Restart())
 }
 
 // init flag
@@ -286,13 +288,15 @@ func initSearch() {
 		logs.Error("search stop dict file " + stopFile + " is not exists!")
 		os.Exit(1)
 	}
+	fmt.Println("gseFile")
+	fmt.Println(gseFile)
 	global.DocSearcher.Init(types.EngineOpts{
-		NumGseThreads:     1,
-		NumIndexerThreads: 1,
-		NumRankerThreads:  1,
-		UseStore:          true,
-		StoreFolder:       SearchIndexAbsDir,
-		Using:             3,
+		//NumGseThreads:     1,
+		//NumIndexerThreads: 1,
+		//NumRankerThreads:  1,
+		UseStore:    true,
+		StoreFolder: SearchIndexAbsDir,
+		Using:       3,
 		//GseDict:           "zh",
 		GseDict:       gseFile,
 		StopTokenFile: stopFile,
@@ -300,6 +304,8 @@ func initSearch() {
 			IndexType: types.LocsIndex,
 		},
 	})
+	fmt.Println("initSearch")
+	fmt.Println(gseFile)
 }
 
 func initWork() {

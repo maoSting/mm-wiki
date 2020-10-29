@@ -1,6 +1,7 @@
 package work
 
 import (
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/phachon/mm-wiki/app/models"
@@ -103,6 +104,8 @@ func (d *DocSearch) getFullTextSearchConf() (timer int64, isOpen bool) {
 	if fulltextSearchOpen == "1" {
 		return timer, true
 	}
+	fmt.Println("timer")
+	fmt.Println(timer)
 	return timer, false
 }
 
