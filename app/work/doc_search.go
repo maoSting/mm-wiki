@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"github.com/phachon/mm-wiki/app/models"
-	"github.com/phachon/mm-wiki/app/services"
-	"github.com/phachon/mm-wiki/app/utils"
+	"mm-wiki/app/models"
+	"mm-wiki/app/services"
+	"mm-wiki/app/utils"
 	"sync"
 	"time"
 )

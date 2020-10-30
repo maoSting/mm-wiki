@@ -3,8 +3,8 @@ package models
 import (
 	"encoding/json"
 	"github.com/astaxie/beego/context"
-	"github.com/phachon/mm-wiki/app/utils"
 	"github.com/snail007/go-activerecord/sqlite3"
+	"mm-wiki/app/utils"
 	"strings"
 	"time"
 )

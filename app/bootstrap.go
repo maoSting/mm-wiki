@@ -7,12 +7,12 @@ import (
 	"github.com/astaxie/beego/logs"
 	"github.com/fatih/color"
 	"github.com/go-ego/riot/types"
-	"github.com/phachon/mm-wiki/app/models"
-	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/phachon/mm-wiki/app/work"
-	"github.com/phachon/mm-wiki/global"
 	"github.com/snail007/go-activerecord/sqlite3"
 	"log"
+	"mm-wiki/app/models"
+	"mm-wiki/app/utils"
+	"mm-wiki/app/work"
+	"mm-wiki/global"
 	"os"
 	"path"
 	"path/filepath"
@@ -50,7 +50,8 @@ var (
 )
 
 func init() {
-	fmt.Println("init")
+	//http.ListenAndServe("127.0.0.1:8080", nil)
+
 	initFlag()
 	poster()
 	initConfig()
@@ -58,10 +59,9 @@ func init() {
 	checkUpgrade()
 	initDocumentDir()
 	initSearch()
-	initWork()
+	//initWork()
 	StartTime = time.Now().Unix()
 	beego.AddFuncMap("dateFormat", utils.Date.Format)
-	//toolbox.NewTask("testTask", "* * * * * *", tasks.Restart())
 }
 
 // init flag
@@ -275,7 +275,6 @@ func checkUpgrade() {
 }
 
 func initSearch() {
-
 	gseFile := filepath.Join(RootDir, "docs/search_dict/dictionary.txt")
 	stopFile := filepath.Join(RootDir, "docs/search_dict/stop_tokens.txt")
 	ok, _ := utils.File.PathIsExists(gseFile)
@@ -288,15 +287,13 @@ func initSearch() {
 		logs.Error("search stop dict file " + stopFile + " is not exists!")
 		os.Exit(1)
 	}
-	fmt.Println("gseFile")
-	fmt.Println(gseFile)
 	global.DocSearcher.Init(types.EngineOpts{
-		//NumGseThreads:     1,
-		//NumIndexerThreads: 1,
-		//NumRankerThreads:  1,
-		UseStore:    true,
-		StoreFolder: SearchIndexAbsDir,
-		Using:       3,
+		NumGseThreads:     2,
+		NumIndexerThreads: 2,
+		NumRankerThreads:  2,
+		UseStore:          true,
+		StoreFolder:       SearchIndexAbsDir,
+		Using:             3,
 		//GseDict:           "zh",
 		GseDict:       gseFile,
 		StopTokenFile: stopFile,
@@ -304,8 +301,6 @@ func initSearch() {
 			IndexType: types.LocsIndex,
 		},
 	})
-	fmt.Println("initSearch")
-	fmt.Println(gseFile)
 }
 
 func initWork() {

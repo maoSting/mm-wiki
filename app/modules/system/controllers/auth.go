@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"github.com/phachon/mm-wiki/app/services"
+	"mm-wiki/app/services"
 	"net/url"
 	"strings"
 
-	"github.com/phachon/mm-wiki/app/models"
-	"github.com/phachon/mm-wiki/app/utils"
+	"mm-wiki/app/models"
+	"mm-wiki/app/utils"
 
 	"github.com/astaxie/beego/validation"
 )

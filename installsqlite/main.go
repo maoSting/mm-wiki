@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"github.com/astaxie/beego"
-	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/phachon/mm-wiki/installsqlite/controllers"
-	"github.com/phachon/mm-wiki/installsqlite/storage"
+	"mm-wiki/app/utils"
+	"mm-wiki/installsqlite/controllers"
+	"mm-wiki/installsqlite/storage"
 	"os"
 	"path/filepath"
 )

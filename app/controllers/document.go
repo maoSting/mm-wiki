@@ -2,12 +2,12 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/phachon/mm-wiki/app/services"
+	"mm-wiki/app/services"
 	"regexp"
 	"strings"
 
-	"github.com/phachon/mm-wiki/app/models"
-	"github.com/phachon/mm-wiki/app/utils"
+	"mm-wiki/app/models"
+	"mm-wiki/app/utils"
 )
 
 type DocumentController struct {

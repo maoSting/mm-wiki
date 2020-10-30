@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"github.com/go-ego/riot/types"
-	"github.com/phachon/mm-wiki/app/models"
-	"github.com/phachon/mm-wiki/app/utils"
-	"github.com/phachon/mm-wiki/global"
+	"mm-wiki/app/models"
+	"mm-wiki/app/utils"
+	"mm-wiki/global"
 	"strings"
 )
 

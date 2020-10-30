@@ -3,8 +3,8 @@ package models
 import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
-	"github.com/phachon/mm-wiki/app/utils"
 	"github.com/snail007/go-activerecord/sqlite3"
+	"mm-wiki/app/utils"
 	"strconv"
 	"strings"
 	"time"

@@ -4,7 +4,7 @@ import (
 	"github.com/snail007/go-activerecord/sqlite3"
 	"time"
 
-	"github.com/phachon/mm-wiki/app/utils"
+	"mm-wiki/app/utils"
 )
 
 const (
