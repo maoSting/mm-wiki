@@ -50,8 +50,6 @@ var (
 )
 
 func init() {
-	//http.ListenAndServe("127.0.0.1:8080", nil)
-
 	initFlag()
 	poster()
 	initConfig()
@@ -59,7 +57,7 @@ func init() {
 	checkUpgrade()
 	initDocumentDir()
 	initSearch()
-	//initWork()
+	initWork()
 	StartTime = time.Now().Unix()
 	beego.AddFuncMap("dateFormat", utils.Date.Format)
 }
@@ -288,17 +286,19 @@ func initSearch() {
 		os.Exit(1)
 	}
 	global.DocSearcher.Init(types.EngineOpts{
-		NumGseThreads:     2,
-		NumIndexerThreads: 2,
-		NumRankerThreads:  2,
+		NumGseThreads:     1,
+		NumIndexerThreads: 1,
+		NumRankerThreads:  1,
 		UseStore:          true,
 		StoreFolder:       SearchIndexAbsDir,
 		Using:             3,
+		StoreShards:       4,
 		//GseDict:           "zh",
 		GseDict:       gseFile,
 		StopTokenFile: stopFile,
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
+			//IndexType: types.LocsIndex,
+			IndexType: types.DocIdsIndex,
 		},
 	})
 }

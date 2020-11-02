@@ -2,8 +2,6 @@ module mm-wiki
 
 go 1.12
 
-replace github.com/coreos/go-systemd => ./vendor/github.com/coreos/go-systemd
-
 replace github.com/snail007/go-activerecord v0.0.0-20200729014052-c52486828493 => github.com/maoSting/go-activerecord v0.0.0-20200930092352-431455e53b5f
 
 require (
@@ -19,6 +17,7 @@ require (
 	github.com/shirou/gopsutil v2.20.5+incompatible
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/snail007/go-activerecord v0.0.0-20200729014052-c52486828493
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/russross/blackfriday.v2 v2.0.0
 )
