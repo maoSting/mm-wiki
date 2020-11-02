@@ -174,12 +174,11 @@ func (this *FrontController) Search() {
 		content := searchDoc.Content
 
 		locIndex := strings.Index(content, keyword)
-		if locIndex > 0 {
-			searchContent := utils.Misc.SubStrUnicodeBySubStrIndex(content, keyword, locIndex, 30, 30)
-			searchDocContents[docId] = searchContent
-		} else {
-			searchDocContents[docId] = content
+		if locIndex < 0 {
+			continue
 		}
+		searchContent := utils.Misc.SubStrUnicodeBySubStrIndex(content, keyword, locIndex, 30, 30)
+		searchDocContents[docId] = searchContent
 		searchDocIds = append(searchDocIds, docId)
 	}
 	documents, err = models.DocumentModel.GetDocumentsByDocumentIds(searchDocIds)
