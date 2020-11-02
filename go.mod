@@ -5,6 +5,7 @@ go 1.12
 replace github.com/snail007/go-activerecord v0.0.0-20200729014052-c52486828493 => github.com/maoSting/go-activerecord v0.0.0-20200930092352-431455e53b5f
 
 require (
+	github.com/algolia/algoliasearch-client-go/v3 v3.4.0
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef // indirect
 	github.com/astaxie/beego v1.12.0
 	github.com/fatih/color v1.7.0

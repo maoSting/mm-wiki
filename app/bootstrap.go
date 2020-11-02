@@ -3,6 +3,7 @@ package app
 import (
 	"flag"
 	"fmt"
+	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/fatih/color"
@@ -56,8 +57,9 @@ func init() {
 	initDB()
 	checkUpgrade()
 	initDocumentDir()
-	initSearch()
-	initWork()
+	//initSearch()
+	//initWork()
+	initAlgoliaSearch()
 	StartTime = time.Now().Unix()
 	beego.AddFuncMap("dateFormat", utils.Date.Format)
 }
@@ -305,4 +307,12 @@ func initSearch() {
 
 func initWork() {
 	work.DocSearchWorker.Start()
+}
+
+func initAlgoliaSearch() {
+	appId := beego.AppConfig.String("algolia::app_id")
+	apiKey := beego.AppConfig.String("algolia::api_key")
+	indexName := beego.AppConfig.String("algolia::index_name")
+	global.SearchClient = search.NewClient(appId, apiKey)
+	global.DocumentIndex = global.SearchClient.InitIndex(indexName)
 }

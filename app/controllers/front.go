@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"fmt"
-	"github.com/go-ego/riot/types"
 	"mm-wiki/app/models"
+	"mm-wiki/app/services"
 	"mm-wiki/app/utils"
 	"mm-wiki/global"
 	"strings"
@@ -43,7 +42,6 @@ func (this *FrontController) Index() {
 }
 
 func (this *FrontController) Detail() {
-	fmt.Println("Detail")
 	documentId := this.GetString("document_id", "")
 	if documentId == "" {
 		this.ViewError("文档未找到！")
@@ -133,7 +131,6 @@ func (this *FrontController) Detail() {
 }
 
 func (this *FrontController) Search() {
-
 	keyword := strings.TrimSpace(this.GetString("keyword", ""))
 	searchType := "content"
 
@@ -159,26 +156,38 @@ func (this *FrontController) Search() {
 	searchDocContents := make(map[string]string)
 
 	// 默认根据内容搜索
-	searchRes := global.DocSearcher.SearchDoc(types.SearchReq{Text: keyword})
+	searchRes, err := global.DocumentIndex.Search(keyword)
+	if err != nil {
+		this.viewLayout("main/search", "default")
+		return
+	}
 	searchDocIds := []string{}
-	for _, searchDoc := range searchRes.Docs {
-		if len(searchDoc.TokenSnippetLocs) == 0 {
-			continue
-		}
-		docId := searchDoc.DocId
+	var documentIndex []services.DocumentIndicesIndex
+
+	err = searchRes.UnmarshalHits(&documentIndex)
+	if err != nil {
+		this.viewLayout("main/search", "default")
+		return
+	}
+	for _, searchDoc := range documentIndex {
+		docId := searchDoc.ObjectID
 		content := searchDoc.Content
-		locIndex := searchDoc.TokenSnippetLocs[0]
-		searchContent := utils.Misc.SubStrUnicodeBySubStrIndex(content, keyword, locIndex, 30, 30)
-		searchDocContents[docId] = searchContent
+
+		locIndex := strings.Index(content, keyword)
+		if locIndex > 0 {
+			searchContent := utils.Misc.SubStrUnicodeBySubStrIndex(content, keyword, locIndex, 30, 30)
+			searchDocContents[docId] = searchContent
+		} else {
+			searchDocContents[docId] = content
+		}
 		searchDocIds = append(searchDocIds, docId)
 	}
 	documents, err = models.DocumentModel.GetDocumentsByDocumentIds(searchDocIds)
-
 	if err != nil {
 		this.ErrorLog("搜索文档出错：" + err.Error())
 		this.ViewError("搜索文档错误！")
 	}
-	// 过滤一下没权限的空间
+	//// 过滤一下没权限的空间
 	realDocuments := []map[string]string{}
 	for _, document := range documents {
 		spaceId, _ := document["space_id"]

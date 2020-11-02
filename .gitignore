@@ -7,7 +7,6 @@ logs/*.log
 mm-wiki
 *.session/
 .mmwiki.sessions/
-mm-wiki.conf
 release/
 release-*
 data/

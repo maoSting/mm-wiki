@@ -278,7 +278,7 @@ func (this *PageController) Modify() {
 	}
 	// 更新文档索引
 	go func(documentId string) {
-		_ = services.DocIndexService.ForceUpdateDocIndexByDocId(documentId)
+		_ = services.AlgoliaIndexService.ForceUpdateDocIndexByDocId(documentId)
 	}(documentId)
 
 	this.InfoLog("修改文档 " + documentId + " 成功")
