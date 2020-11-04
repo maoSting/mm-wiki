@@ -28,6 +28,21 @@
 </div>
 
 <div class="layui-container footer">
+    <div class="layui-row" style="margin: 35px; text-align: center;">
+        &copy; 2020 yuyinmp3.com
+    </div>
+    <div class="layui-carousel" id="carousel">
+        <div carousel-item>
+            <div class="layui-row">
+                <div class="layui-col-md4"><img src=""></div>
+                <div class="layui-col-md8">
+                    <p>step:1</p>
+                    <p>step:2</p>
+                </div>
+            </div>
+            <div>条目2</div>
+        </div>
+    </div>
     <div class="layui-row">
         <div class="layui-col-md5 layui-col-sm12">
             <div class="layui-card">
@@ -57,6 +72,17 @@
         </div>
     </div>
 </div>
-
+<script>
+    layui.use('carousel', function(){
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#carousel'
+            ,width: '100%' //设置容器宽度
+            ,arrow: 'always' //始终显示箭头
+            //,anim: 'updown' //切换动画方式
+        });
+    });
+</script>
 </body>
 </html>

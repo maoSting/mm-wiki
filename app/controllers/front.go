@@ -139,7 +139,7 @@ func (this *FrontController) Search() {
 	this.Data["keyword"] = keyword
 	this.Data["count"] = 0
 	if keyword == "" {
-		this.viewLayout("main/search", "default")
+		this.viewLayout("front/search", "layout_front")
 		return
 	}
 	var documents = []map[string]string{}
@@ -165,7 +165,7 @@ func (this *FrontController) Search() {
 	)
 
 	if err != nil {
-		this.viewLayout("main/search", "default")
+		this.viewLayout("front/search", "layout_front")
 		return
 	}
 
@@ -174,7 +174,7 @@ func (this *FrontController) Search() {
 
 	err = searchRes.UnmarshalHits(&documentIndex)
 	if err != nil {
-		this.viewLayout("main/search", "default")
+		this.viewLayout("front/search", "layout_front")
 		return
 	}
 	for _, searchDoc := range documentIndex {
