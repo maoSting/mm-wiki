@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/algolia/algoliasearch-client-go/v3/algolia/opt"
 	"mm-wiki/app/models"
 	"mm-wiki/app/services"
 	"mm-wiki/app/utils"
@@ -156,11 +157,18 @@ func (this *FrontController) Search() {
 	searchDocContents := make(map[string]string)
 
 	// 默认根据内容搜索
-	searchRes, err := global.DocumentIndex.Search(keyword)
+	searchRes, err := global.DocumentIndex.Search(keyword,
+		opt.HighlightPreTag("<mark>"),
+		opt.HighlightPostTag("</mark>"),
+		opt.ResponseFields("hits", "nbHits"),
+		//opt.AttributesToSnippet("content:100"),
+	)
+
 	if err != nil {
 		this.viewLayout("main/search", "default")
 		return
 	}
+
 	searchDocIds := []string{}
 	var documentIndex []services.DocumentIndicesIndex
 
