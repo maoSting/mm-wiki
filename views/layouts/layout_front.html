@@ -4,65 +4,86 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>余音MP3</title>
-    <meta name="keyword" content="音乐 港台 内地 免费 下载" />
-    <meta name="description" content="歌手音乐免费下载，百度网盘获取。" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="keyword" content="音乐 港台 内地 免费 下载"/>
+    <meta name="description" content="歌手音乐免费下载，百度网盘获取。"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="/static/plugins/layui/css/layui.css">
     <script type="text/javascript" src="/static/plugins/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="/static/plugins/jquery/jquery1.11.js"></script>
     <style type="text/css">
         .dl-tip {
-            font-size:22px;
-            font-weight:300;
-            text-align:center;
+            font-size: 22px;
+            font-weight: 300;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<script src="/layui/layui.js"></script>
+<script src="/static/plugins/layui/layui.js"></script>
 <ul class="layui-nav" lay-filter="">
     <li class="layui-nav-item"><a href="/">余音MP3</a></li>
 </ul>
 <div class="layui-main">
+    <div class="layui-row" style="margin: 35px;">
+        <form class="layui-form" action="/search">
+            <div class="layui-col-md-offset1">
+                <div class="layui-col-md8">
+                    <div class="layui-input-block">
+                        <input type="text" name="keyword" value="{{.keyword}}" placeholder="请输入歌曲名称"
+                               class="layui-input">
+                    </div>
+                </div>
+                <button class="layui-btn">搜索</button>
+            </div>
+        </form>
+    </div>
     {{.LayoutContent}}
 </div>
 
-<div class="layui-container footer">
-    <div class="layui-row" style="margin: 35px; text-align: center;">
-        &copy; 2020 yuyinmp3.com
-    </div>
-    <div class="layui-carousel dl-tip" id="carousel">
+<div class="layui-container footer" style="clear:both;">
+    <div class="layui-carousel  dl-tip" id="carousel">
         <div carousel-item>
             <div class="layui-row">
-                <div class="layui-col-md4"><img src=""></div>
+                <div class="layui-col-md4">
+                    <img src="/static/images/front/zhifubao_23.png" style="width: 200px; height: 300px;">
+                </div>
                 <div class="layui-col-md8">
-                    <p>step:1</p>
-                    <p>step:2</p>
+                    <p class="layui-row" style="margin: 20px; text-align: left;">1、10元 任意3名歌手</p>
+                    <p class="layui-row" style="margin: 20px; text-align: left;">2、扫码付款时在备注中填写歌手名称和邮箱</p>
+                    <p class="layui-row" style="margin: 20px; text-align: left;">3、每天站长会在晚上8点集中发送</p>
                 </div>
             </div>
             <div>
                 <div class="layui-card">
-                    <div class="layui-card-header" title="欢迎捐赠">欢迎捐赠</div>
+                    <div class="layui-card-header" title="欢迎捐赠">站长联系方式</div>
                     <div class="layui-card-body dl-tip">
-                        <a href="https://github.com/maoSting/drip-donate">捐赠列表</a>
+                        <p style="font-size: 10px;">版权归版权所有者，站长仅做搜集整理，如侵犯您的权益请联系站长进行删除</p>
                         <br/>
-                        asdf # google dot com
+                        eagleflyinmyheart # google dot com
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="layui-row" style="margin: 35px; text-align: center;">
+        &copy; 2020 yuyinmp3.com
+    </div>
 </div>
 <script>
-    layui.use('carousel', function(){
+    layui.use('carousel', function () {
         var carousel = layui.carousel;
-        //建造实例
-        carousel.render({
+        var options = {
             elem: '#carousel'
-            ,width: '100%' //设置容器宽度
-            ,arrow: 'always' //始终显示箭头
+            , width: '100%' //设置容器宽度
+            , arrow: 'always' //始终显示箭头
             //,anim: 'updown' //切换动画方式
-        });
+            , autoplay: false
+            , arrow: 'hover'
+        }
+        //建造实例
+        var ins = carousel.render(options);
+        ins.reload(options);
     });
 </script>
 </body>
