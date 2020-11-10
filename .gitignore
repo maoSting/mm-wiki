@@ -4,7 +4,6 @@ logs/*.log
 .gitignore___jb_tmp___
 *.exe
 *.exe~
-mm-wiki
 *.session/
 .mmwiki.sessions/
 release/
