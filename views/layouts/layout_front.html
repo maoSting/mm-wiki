@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>余音MP3</title>
-    <meta name="keyword" content="音乐 港台 内地 免费 下载"/>
-    <meta name="description" content="歌手音乐免费下载，百度网盘获取。"/>
+    <title>{{if .page_title}}{{.page_title}}-{{end}}余音MP3</title>
+    <meta name="keyword" content="{{if .page_title}}{{.page_title}} 歌曲大全 资源 专辑 无损 {{end}}音乐 港台 内地 免费 下载"/>
+    <meta name="description" content="{{if .page_title}}{{.page_title}} 歌曲大全 资源 专辑 无损 {{end}}歌手音乐免费下载，百度网盘获取。"/>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="/static/plugins/layui/css/layui.css">
     <script type="text/javascript" src="/static/plugins/layui/layui.js" charset="utf-8"></script>

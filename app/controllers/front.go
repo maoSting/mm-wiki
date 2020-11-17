@@ -121,6 +121,7 @@ func (this *FrontController) Detail() {
 		collectionId = collection["collection_id"]
 	}
 
+	this.Data["page_title"] = document["name"]
 	this.Data["space"] = space
 	this.Data["create_user"] = createUser
 	this.Data["edit_user"] = editUser
