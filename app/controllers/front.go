@@ -45,59 +45,62 @@ func (this *FrontController) Index() {
 func (this *FrontController) Detail() {
 	documentId := this.GetString("document_id", "")
 	if documentId == "" {
-		this.ViewError("文档未找到！")
+		this.ViewFrontError("文档未找到！")
+		return
 	}
 
 	document, err := models.DocumentModel.GetDocumentByDocumentId(documentId)
 	if err != nil {
 		this.ErrorLog("查找文档 " + documentId + " 失败：" + err.Error())
-		this.ViewError("查找文档失败！")
+		this.ViewFrontError("查找文档失败！")
+		return
 	}
 	if len(document) == 0 {
-		this.ViewError("文档不存在！")
+		this.ViewFrontError("文档不存在！")
+		return
 	}
 
 	spaceId := document["space_id"]
 	space, err := models.SpaceModel.GetSpaceBySpaceId(spaceId)
 	if err != nil {
 		this.ErrorLog("查找文档 " + documentId + " 所在空间失败：" + err.Error())
-		this.ViewError("查找文档失败！")
+		this.ViewFrontError("查找文档失败！")
 	}
 	if len(space) == 0 {
-		this.ViewError("文档所在空间不存在！")
+		this.ViewFrontError("文档所在空间不存在！")
 	}
 	// check space visit_level
 	//isVisit, isEditor, _ := this.GetDocumentPrivilege(space)
 	//if !isVisit {
-	//	this.ViewError("您没有权限访问该空间！")
+	//	this.ViewFrontError("您没有权限访问该空间！")
 	//}
 
 	// get parent documents by document
 	parentDocuments, pageFile, err := models.DocumentModel.GetParentDocumentsByDocument(document)
 	if err != nil {
 		this.ErrorLog("查找父文档失败：" + err.Error())
-		this.ViewError("查找父文档失败！")
+		this.ViewFrontError("查找父文档失败！")
 	}
 
 	if len(parentDocuments) == 0 {
-		this.ViewError("父文档不存在！")
+		this.ViewFrontError("父文档不存在！")
 	}
 
 	// get document content
 	documentContent, err := utils.Document.GetContentByPageFile(pageFile)
 	if err != nil {
 		this.ErrorLog("查找文档 " + documentId + " 失败：" + err.Error())
-		this.ViewError("文档不存在！")
+		this.ViewFrontError("文档不存在！")
 	}
 
 	// get edit user and create user
 	users, err := models.UserModel.GetUsersByUserIds([]string{document["create_user_id"], document["edit_user_id"]})
 	if err != nil {
 		this.ErrorLog("查找文档 " + documentId + " 失败：" + err.Error())
-		this.ViewError("查找文档失败！")
+		this.ViewFrontError("查找文档失败！")
 	}
 	if len(users) == 0 {
-		this.ViewError("文档创建用户不存在！")
+		this.ViewFrontError("文档创建用户不存在！")
 	}
 
 	var createUser = map[string]string{}
@@ -115,7 +118,7 @@ func (this *FrontController) Detail() {
 	collection, err := models.CollectionModel.GetCollectionByUserIdTypeAndResourceId(this.UserId, models.Collection_Type_Doc, documentId)
 	if err != nil {
 		this.ErrorLog("查找文档 " + documentId + " 失败：" + err.Error())
-		this.ViewError("文档查找失败！")
+		this.ViewFrontError("文档查找失败！")
 	}
 	if len(collection) > 0 {
 		collectionId = collection["collection_id"]
@@ -149,7 +152,7 @@ func (this *FrontController) Search() {
 	ReleaseSpaces, err := models.SpaceModel.GetSpacesByVisitLevel(models.Space_VisitLevel_Release)
 	if err != nil {
 		this.ErrorLog("搜索文档列表获取用户空间权限出错：" + err.Error())
-		this.ViewError("搜索文档错误！")
+		this.ViewFrontError("搜索文档错误！")
 	}
 	spaceIdsMap := make(map[string]bool)
 	for _, publicSpace := range ReleaseSpaces {
@@ -193,7 +196,7 @@ func (this *FrontController) Search() {
 	documents, err = models.DocumentModel.GetDocumentsByDocumentIds(searchDocIds)
 	if err != nil {
 		this.ErrorLog("搜索文档出错：" + err.Error())
-		this.ViewError("搜索文档错误！")
+		this.ViewFrontError("搜索文档错误！")
 	}
 	//// 过滤一下没权限的空间
 	realDocuments := []map[string]string{}
@@ -215,7 +218,28 @@ func (this *FrontController) Search() {
 
 	this.Data["search_type"] = searchType
 	this.Data["keyword"] = keyword
+	this.Data["page_title"] = keyword
 	this.Data["documents"] = realDocuments
 	this.Data["count"] = len(realDocuments)
 	this.viewLayout("front/search", "layout_front")
+}
+
+// view layout
+func (this *FrontController) ViewFrontError(content string, redirect ...string) {
+	var url = ""
+	var sleep = "5"
+	if len(redirect) == 1 {
+		url = redirect[0]
+	}
+	if len(redirect) > 1 {
+		sleep = redirect[1]
+	}
+	if content == "" {
+		content = "操作失败"
+	}
+	this.Data["content"] = content
+	this.Data["url"] = url
+	this.Data["sleep"] = sleep
+	this.Data["copyright"] = "yuyinmp3.com"
+	this.viewLayout("error/front", "layout_front")
 }
